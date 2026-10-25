@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-// API Endpoint
+// API Endpoint untuk pakan
 app.get('/api/pakan', (req, res) => {
   res.json({
     success: true,
