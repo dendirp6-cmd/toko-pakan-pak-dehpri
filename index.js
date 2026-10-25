@@ -3,23 +3,47 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Gunakan /tmp untuk penyimpanan sementara di environment Serverless Vercel
+const isVercel = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME;
+const baseUploadPath = isVercel ? '/tmp' : 'public';
+const dataFilePath = isVercel ? '/tmp/data.json' : path.join(__dirname, 'data.json');
+
+// Inisialisasi file data.json di /tmp jika belum ada (khusus Vercel)
+if (isVercel && !fs.existsSync(dataFilePath)) {
+  try {
+    const originalDataPath = path.join(__dirname, 'data.json');
+    if (fs.existsSync(originalDataPath)) {
+      fs.copyFileSync(originalDataPath, dataFilePath);
+    } else {
+      fs.writeFileSync(dataFilePath, '[]', 'utf8');
+    }
+  } catch (err) {
+    console.error('Gagal menyiapkan data.json di /tmp:', err);
+  }
+}
+
 // Konfigurasi Multer untuk Musik & Gambar Produk
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let folder = 'public/uploads';
+    let folder = path.join(baseUploadPath, 'uploads');
     if (file.fieldname === 'fileMusik') {
-      folder = 'public/audio';
+      folder = path.join(baseUploadPath, 'audio');
     }
-    if (!fs.existsSync(folder)) {
-      fs.mkdirSync(folder, { recursive: true });
+    
+    try {
+      if (!fs.existsSync(folder)) {
+        fs.mkdirSync(folder, { recursive: true });
+      }
+      cb(null, folder);
+    } catch (err) {
+      cb(err, folder);
     }
-    cb(null, folder);
   },
   filename: function (req, file, cb) {
     const ext = path.extname(file.originalname);
@@ -30,18 +54,25 @@ const storage = multer.diskStorage({
     }
   }
 });
+
 const upload = multer({ storage: storage });
 
-const dataFilePath = path.join(__dirname, 'data.json');
-
 function bacaData() {
-  if (!fs.existsSync(dataFilePath)) return [];
-  const fileData = fs.readFileSync(dataFilePath, 'utf8');
-  return JSON.parse(fileData);
+  try {
+    if (!fs.existsSync(dataFilePath)) return [];
+    const fileData = fs.readFileSync(dataFilePath, 'utf8');
+    return JSON.parse(fileData);
+  } catch (err) {
+    return [];
+  }
 }
 
 function simpanData(data) {
-  fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
+  try {
+    fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Gagal menyimpan data:', err);
+  }
 }
 
 // API GET Produk
@@ -65,12 +96,14 @@ app.delete('/api/pakan/:id', (req, res) => {
   res.json({ status: 'success', message: 'Produk berhasil dihapus!' });
 });
 
-// API POST Produk dengan Upload Gambar
+// API POST Produk dengan Upload Gambar dari HP
 app.post('/api/pakan', upload.single('gambarProduk'), (req, res) => {
   const { nama, stok, harga } = req.body;
   const daftarPakan = bacaData();
   
-  const gambarPath = req.file ? `/uploads/${req.file.filename}` : 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=300&auto=format&fit=crop&q=80';
+  const gambarPath = req.file 
+    ? `/uploads/${req.file.filename}` 
+    : 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=300&auto=format&fit=crop&q=80';
 
   const produkBaru = {
     id: daftarPakan.length > 0 ? daftarPakan[daftarPakan.length - 1].id + 1 : 1,
@@ -88,9 +121,15 @@ app.post('/api/pakan', upload.single('gambarProduk'), (req, res) => {
 
 // API POST Upload Musik
 app.post('/api/upload-musik', upload.single('fileMusik'), (req, res) => {
-  res.json({ status: 'success', message: 'Musik latar berhasil di-upload!' });
+  res.json({ status: 'success', message: 'Musik latar berhasil di-upload dari HP!' });
 });
 
-app.listen(port, () => {
-  console.log(`Server berjalan di http://localhost:${port}`);
-});
+// Hanya jalankan server lokal jika di-run langsung (bukan via Vercel function)
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server berjalan di http://localhost:${port}`);
+  });
+}
+
+// Export module untuk Vercel Serverless
+module.exports = app;
