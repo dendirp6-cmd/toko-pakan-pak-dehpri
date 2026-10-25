@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Pakan Ternak Pak Dehpri</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f5; margin: 0; padding: 15px; color: #31353b; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2, h3 { color: #03ac03; text-align: center; margin-top: 0; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 12px; }
+        input, textarea { width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+        button { background-color: #03ac03; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #028a02; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #6d7582; text-decoration: none; font-size: 13px; }
+        hr { border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0; }
+        
+        /* Style untuk Tabel Data Produk */
+        .table-responsive { width: 100%; overflow-x: auto; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
+        th, td { padding: 8px; border: 1px solid #e5e7eb; vertical-align: middle; }
+        th { background-color: #f9fafb; color: #31353b; font-weight: bold; }
+        img.thumb { width: 35px; height: 35px; object-fit: cover; border-radius: 4px; }
+        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 5px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; }
+        .btn-delete:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🛠️ Panel Admin Toko</h2>
+        
+        <!-- Form Tambah Produk -->
+        <form id="form-tambah">
+            <h3>Tambah Produk Pakan</h3>
+            <div class="form-group">
+                <label>Nama Produk Pakan:</label>
+                <input type="text" id="nama" required placeholder="Contoh: Pakan Perkutut Phoenix">
+            </div>
+            <div class="form-group">
+                <label>Stok (KG / Sak):</label>
+                <input type="number" id="stok" required placeholder="Contoh: 100">
+            </div>
+            <div class="form-group">
+                <label>Harga (Rp):</label>
+                <input type="number" id="harga" required placeholder="Contoh: 15000">
+            </div>
+            <div class="form-group">
+                <label>Deskripsi Produk:</label>
+                <textarea id="deskripsi" rows="2" placeholder="Special Formula Anti Stress..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Foto Produk dari Galeri HP:</label>
+                <input type="file" id="gambarProduk" accept="image/*" required>
+            </div>
+            <button type="submit">Simpan Produk Baru</button>
+        </form>
+
+        <hr>
+
+        <!-- DataTable / Tabel Data Produk -->
+        <div>
+            <h3>📦 Kelola Data Produk</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nama & Deskripsi</th>
+                            <th>Harga & Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-produk-body">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #6d7582;">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Form Upload Musik -->
+        <form id="form-musik">
+            <h3>🎵 Upload Musik Latar dari HP</h3>
+            <div class="form-group">
+                <label>Pilih File Musik (.mp3):</label>
+                <input type="file" id="fileMusik" accept="audio/mp3,audio/*" required>
+            </div>
+            <button type="submit" style="background-color: #25d366;">Upload & Simpan Musik</button>
+        </form>
+
+        <a href="/" class="back-link">⬅️ Kembali ke Halaman Utama Toko</a>
+    </div>
+
+    <script>
+        // Fungsi Memuat Data ke Tabel Admin
+        function muatTabelAdmin() {
+            fetch('/api/pakan')
+                .then(res => res.json())
+                .then(result => {
+                    const tbody = document.getElementById('tabel-produk-body');
+                    tbody.innerHTML = '';
+                    
+                    const data = result.data || [];
+                    if(data.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #6d7582;">Belum ada produk tersimpan.</td></tr>`;
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="text-align: center;"><img src="${item.gambar}" class="thumb" alt="Foto"></td>
+                            <td>
+                                <b>${item.nama}</b><br>
+                                <span style="color: #6d7582; font-size: 10px;">${item.deskripsi || '-'}</span>
+                            </td>
+                            <td>
+                                Rp ${item.harga.toLocaleString('id-ID')}<br>
+                                <b>Stok:</b> ${item.stok}
+                            </td>
+                            <td style="text-align: center;">
+                                <button class="btn-delete" onclick="hapusProduk(${item.id})">Hapus</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        }
+
+        // Panggil saat halaman dibuka
+        muatTabelAdmin();
+
+        // Fungsi Hapus Produk
+        function hapusProduk(id) {
+            if (confirm('Yakin ingin menghapus produk ini?')) {
+                fetch(`/api/pakan/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(result => {
+                    alert(result.message);
+                    muatTabelAdmin(); // Refresh tabel setelah dihapus
+                })
+                .catch(err => alert('Gagal menghapus produk.'));
+            }
+        }
+
+        // Handle Form Tambah Produk
+        document.getElementById('form-tambah').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('nama', document.getElementById('nama').value);
+            formData.append('stok', document.getElementById('stok').value);
+            formData.append('harga', document.getElementById('harga').value);
+            formData.append('deskripsi', document.getElementById('deskripsi').value);
+            
+            const fileInput = document.getElementById('gambarProduk');
+            if (fileInput.files.length > 0) {
+                formData.append('gambarProduk', fileInput.files[0]);
+            }
+
+            fetch('/api/pakan', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(result => {
+                alert(result.message);
+                document.getElementById('form-tambah').reset();
+                muatTabelAdmin(); // Refresh tabel setelah produk ditambah
+            })
+            .catch(err => alert('Gagal menambahkan produk.'));
+        });
+
+        // Handle Upload Musik
+        document.getElementById('form-musik').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('fileMusik');
+            if (fileInput.files.length === 0) return;
+
+            const formData = new FormData();
+            formData.append('fileMusik', fileInput.files[0]);
+
+            fetch('/api/upload-musik', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(result => {
+                alert(result.message);
+                document.getElementById('form-musik').reset();
+            });
+        });
+    </script>
+
+</body>
+</html>

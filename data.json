@@ -1,0 +1,128 @@
+[
+  {
+    "id": 7,
+    "nama": "PHOENIX",
+    "stok": 20,
+    "harga": 15000,
+    "gambar": "/uploads/produk_1792925534468.jpg"
+  },
+  {
+    "id": 8,
+    "nama": "LEOPARD",
+    "stok": 50,
+    "harga": 20000,
+    "gambar": "/uploads/produk_1792925931875.jpg"
+  },
+  {
+    "id": 9,
+    "nama": "EBOD LOVE BIRD",
+    "stok": 30,
+    "harga": 12000,
+    "gambar": "/uploads/produk_1792927096117.jpg"
+  },
+  {
+    "id": 10,
+    "nama": "EBID CANARY",
+    "stok": 25,
+    "harga": 25000,
+    "gambar": "/uploads/produk_1792927152097.jpg"
+  },
+  {
+    "id": 11,
+    "nama": "TOP SONG",
+    "stok": 30,
+    "harga": 32000,
+    "gambar": "/uploads/produk_1792927265030.jpg"
+  },
+  {
+    "id": 12,
+    "nama": "PELET KUNING",
+    "stok": 40,
+    "harga": 18000,
+    "gambar": "/uploads/produk_1792927311449.jpg"
+  },
+  {
+    "id": 13,
+    "nama": "GOLD COIN",
+    "stok": 25,
+    "harga": 25000,
+    "gambar": "/uploads/produk_1792928267437.jpg"
+  },
+  {
+    "id": 14,
+    "nama": "PETROKUM (RACUN TIKUS)",
+    "stok": 10,
+    "harga": 10000,
+    "gambar": "/uploads/produk_1792928315286.jpg"
+  },
+  {
+    "id": 15,
+    "nama": "VITA CHICK",
+    "stok": 50,
+    "harga": 5000,
+    "gambar": "/uploads/produk_1792928456282.jpg"
+  },
+  {
+    "id": 16,
+    "nama": "TETRA CHLOR",
+    "stok": 20,
+    "harga": 5000,
+    "gambar": "/uploads/produk_1792928518845.jpg"
+  },
+  {
+    "id": 17,
+    "nama": "DOXYVET",
+    "stok": 50,
+    "harga": 5000,
+    "gambar": "/uploads/produk_1792928600631.jpg"
+  },
+  {
+    "id": 18,
+    "nama": " EXCEL (ORANGE - TUNA)",
+    "stok": 50,
+    "harga": 25000,
+    "gambar": "/uploads/produk_1792928683050.jpg"
+  },
+  {
+    "id": 19,
+    "nama": "LEOPARD (RUMPUT LAUT)",
+    "stok": 20,
+    "harga": 18000,
+    "gambar": "/uploads/produk_1792929124201.jpg"
+  },
+  {
+    "id": 20,
+    "nama": "MISTER PUSS",
+    "stok": 50,
+    "harga": 25000,
+    "gambar": "/uploads/produk_1792929153995.jpg"
+  },
+  {
+    "id": 21,
+    "nama": "MISTER PUSS",
+    "stok": 50,
+    "harga": 28000,
+    "gambar": "/uploads/produk_1792929182958.jpg"
+  },
+  {
+    "id": 22,
+    "nama": "CAT CHOIZE",
+    "stok": 100,
+    "harga": 50,
+    "gambar": "/uploads/produk_1792929228786.jpg"
+  },
+  {
+    "id": 23,
+    "nama": "CAT CHOIZE",
+    "stok": 50,
+    "harga": 25000,
+    "gambar": "/uploads/produk_1792929272995.jpg"
+  },
+  {
+    "id": 24,
+    "nama": "HI-PRO-VITE (A5)",
+    "stok": 100,
+    "harga": 20000,
+    "gambar": "/uploads/produk_1792929328093.png"
+  }
+]
