@@ -95,6 +95,9 @@ app.post('/api/upload-musik', upload.single('fileMusik'), (req, res) => {
   res.json({ status: 'success', message: 'Musik latar berhasil di-upload dari HP!' });
 });
 
-app.listen(port, () => {
-  console.log(`Server berjalan di http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+        console.log(`Server berjalan di http://localhost:${port}`);
+    });
+}
+module.exports = app;
