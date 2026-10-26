@@ -5,68 +5,78 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Header CORS agar tidak diblokir browser
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Melayani file statis dari folder public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Data sementara (Mock Database)
+// Data Mockup
 let dataPakan = [
   {
-    id: 1,
+    id: "1",
     nama: "Pakan Ayam Broiler BR-1",
     harga: 380000,
     stok: 50,
     gambar: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80",
-    deskripsi: "Pakan berkadar protein tinggi untuk pertumbuhan ayam broiler."
+    deskripsi: "Pakan berkadar protein tinggi cocok untuk pertumbuhan ayam broiler."
   },
   {
-    id: 2,
+    id: "2",
     nama: "Pakan Bebek Petelur Premium",
     harga: 355000,
     stok: 30,
     gambar: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80",
-    deskripsi: "Nutrisi lengkap untuk meningkatkan kualitas dan produksi telur bebek."
+    deskripsi: "Mengandung kalsium tinggi untuk meningkatkan produksi telur bebek."
   }
 ];
 
-// --- API ENDPOINTS ---
+// --- API ROUTES ---
 
-// GET: Ambil daftar pakan
+// GET All Pakan
 app.get('/api/pakan', (req, res) => {
   res.json({ success: true, data: dataPakan });
 });
 
-// POST: Tambah pakan baru
+// POST Tambah Pakan
 app.post('/api/pakan', (req, res) => {
   const { nama, harga, stok, gambar, deskripsi } = req.body;
   const newPakan = {
-    id: Date.now(),
-    nama,
+    id: String(Date.now()),
+    nama: nama || "Produk Pakan",
     harga: Number(harga) || 0,
     stok: Number(stok) || 0,
     gambar: gambar || "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80",
-    deskripsi
+    deskripsi: deskripsi || ""
   };
   dataPakan.push(newPakan);
-  res.json({ success: true, message: "Produk berhasil ditambahkan", data: newPakan });
+  res.json({ success: true, message: "Produk berhasil ditambahkan!", data: newPakan });
 });
 
-// DELETE: Hapus pakan berdasarkan ID
+// DELETE Pakan By ID
 app.delete('/api/pakan/:id', (req, res) => {
-  const targetId = req.params.id;
-  const initialLength = dataPakan.length;
+  const targetId = String(req.params.id);
+  const lengthBefore = dataPakan.length;
   
-  // Filter dengan perbandingan string agar cocok sempurna
-  dataPakan = dataPakan.filter(item => String(item.id) !== String(targetId));
+  dataPakan = dataPakan.filter(item => String(item.id) !== targetId);
 
-  if (dataPakan.length < initialLength) {
-    res.json({ success: true, message: "Produk berhasil dihapus" });
+  if (dataPakan.length < lengthBefore) {
+    return res.json({ success: true, message: "Produk berhasil dihapus!" });
   } else {
-    res.status(404).json({ success: false, message: "Produk tidak ditemukan" });
+    return res.status(404).json({ success: false, message: "Data produk tidak ditemukan!" });
   }
 });
 
-// Fallback route ke index.html
-app.get('/', (req, res) => {
+// Fallback Route
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
