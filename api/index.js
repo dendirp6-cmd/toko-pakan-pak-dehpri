@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Melayani file statis dari folder public
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,9 +41,9 @@ app.post('/api/pakan', (req, res) => {
   const newPakan = {
     id: Date.now(),
     nama,
-    harga: Number(harga),
-    stok: Number(stok),
-    gambar: gambar || "https://via.placeholder.com/300",
+    harga: Number(harga) || 0,
+    stok: Number(stok) || 0,
+    gambar: gambar || "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80",
     deskripsi
   };
   dataPakan.push(newPakan);
@@ -51,9 +52,11 @@ app.post('/api/pakan', (req, res) => {
 
 // DELETE: Hapus pakan berdasarkan ID
 app.delete('/api/pakan/:id', (req, res) => {
-  const { id } = req.params;
+  const targetId = req.params.id;
   const initialLength = dataPakan.length;
-  dataPakan = dataPakan.filter(item => item.id != id);
+  
+  // Filter dengan perbandingan string agar cocok sempurna
+  dataPakan = dataPakan.filter(item => String(item.id) !== String(targetId));
 
   if (dataPakan.length < initialLength) {
     res.json({ success: true, message: "Produk berhasil dihapus" });
@@ -62,7 +65,7 @@ app.delete('/api/pakan/:id', (req, res) => {
   }
 });
 
-// Fallback Route ke public/index.html
+// Fallback route ke index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
