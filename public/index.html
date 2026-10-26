@@ -1,521 +1,220 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pakan Ternak Pak Dehpri - Official Store</title>
-    <style>
-        :root {
-            --tokped-green: #03ac03;
-            --tokped-dark: #028a02;
-            --whatsapp: #25d366;
-            --whatsapp-dark: #1ebe57;
-            --bg-gray: #f3f4f5;
-            --text-main: #31353b;
-            --text-muted: #6d7582;
-            --border-color: #e5e7eb;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toko Pakan Pak Dehpri - Solusi Pakan Ternak Berkualitas</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-gray);
-            margin: 0;
-            padding: 0 0 70px 0;
-            color: var(--text-main);
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+            }
+          }
         }
-
-        .top-header {
-            background: white;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-
-        .search-box {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            background: #f0f3f7;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 8px 12px;
-            gap: 8px;
-        }
-
-        .search-box input {
-            border: none;
-            background: transparent;
-            outline: none;
-            font-size: 14px;
-            width: 100%;
-            color: var(--text-main);
-        }
-
-        .header-icons {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        /* Style untuk Popup / Modal Detail Produk */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #e5e7eb;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #6d7582;
-        }
-        .modal-body {
-            padding: 15px;
-            text-align: center;
-        }
-        .modal-body img {
-            width: 100%;
-            height: 250px;
-            object-fit: contain;
-            background-color: #f9fafb;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-        .modal-title { font-size: 15px; font-weight: bold; margin-bottom: 6px; color: #31353b; }
-        .modal-price { font-size: 16px; font-weight: bold; color: #fa591d; margin-bottom: 8px; }
-        .modal-desc { font-size: 12px; color: #6d7582; line-height: 1.4; text-align: left; background: #f9fafb; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
-
-        /* Floating Music Player Button Style */
-        .music-btn {
-            background: #e8f5e9;
-            border: 1px solid var(--tokped-green);
-            color: var(--tokped-green);
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .category-container {
-            background: white;
-            padding: 14px 12px;
-            display: flex;
-            justify-content: space-around;
-            overflow-x: auto;
-            border-bottom: 1px solid var(--border-color);
-            white-space: nowrap;
-        }
-
-        .category-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            color: var(--text-main);
-            font-size: 11px;
-            font-weight: 500;
-            min-width: 60px;
-        }
-
-        .category-icon {
-            width: 42px;
-            height: 42px;
-            background: #e8f5e9;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: var(--tokped-green);
-        }
-
-        .section-banner {
-            padding: 12px 16px 4px;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 8px 12px;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid var(--border-color);
-            position: relative;
-        }
-
-        .discount-badge {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: #ff4d4f;
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            z-index: 2;
-        }
-
-        .product-img-wrapper {
-            width: 100%;
-            height: 280px;
-            background-color: #ffffff;
-            overflow: hidden;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            cursor: pointer;
-        }
-
-        .product-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        .product-body {
-            padding: 8px 10px;
-        }
-
-        .product-name {
-            font-size: 12px;
-            font-weight: bold;
-            color: #31353b;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-        }
-
-        .product-price {
-            font-size: 13px;
-            font-weight: bold;
-            color: #fa591d;
-            margin-bottom: 2px;
-        }
-
-        .product-stock {
-            font-size: 10px;
-            color: #6d7582;
-            margin-bottom: 4px;
-        }
-
-        .badge-official {
-            display: inline-block;
-            background: #e1f5fe;
-            color: #0288d1;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 1px 4px;
-            border-radius: 3px;
-            margin-top: 2px;
-            width: fit-content;
-        }
-
-        .card-footer-action {
-            padding: 0 10px 10px;
-        }
-
-        .btn-wa {
-            background-color: var(--whatsapp);
-            color: white;
-            text-align: center;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 700;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .btn-wa:hover {
-            background-color: var(--whatsapp-dark);
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            border-top: 1px solid var(--border-color);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-size: 11px;
-            gap: 2px;
-        }
-
-        .nav-item.active {
-            color: var(--tokped-green);
-            font-weight: 600;
-        }
-
-        .nav-item svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-
-        .loading-text {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-    </style>
+      }
+    }
+  </script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased pb-24 md:pb-10">
 
-    <!-- Audio Element untuk Musik Akustik Piano Otomatis -->
-    <audio id="bgMusic" loop>
-        <source src="/audio/background.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
-
-    <!-- Top Search Header -->
-    <div class="top-header">
-        <div class="search-box">
-            <svg width="16" height="16" fill="#9ca3af" viewBox="0 0 24 24"><path d="M21.71 20.29l-5.005-5.005C17.79 13.857 18.5 12.012 18.5 10c0-4.687-4.313-8.5-9.5-8.5S-0.5 5.313-0.5 10s4.313 8.5 9.5 8.5c2.012 0 3.857-.71 5.285-1.795l5.005 5.005c.39.39 1.024.39 1.414 0 .39-.39.39-1.024 0-1.414zM9 16c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"/></svg>
-            <input type="text" id="searchInput" placeholder="Cari pakan ternak idaman...">
+  <!-- Header / Navbar Sticky -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-wheat-awn text-xl"></i>
         </div>
-        <div class="header-icons">
-            <button class="music-btn" id="musicToggleBtn" onclick="toggleMusic()">🎵 Putar Musik</button>
-            <a href="/admin.html" title="Menu Admin" style="text-decoration:none; font-size: 18px;">⚙️</a>
+        <div>
+          <h1 class="font-bold text-lg leading-tight text-gray-900 group-hover:text-brand-600 transition-colors">Pak Dehpri</h1>
+          <p class="text-[10px] text-gray-500 font-medium -mt-1">Pakan Ternak Premium</p>
         </div>
-    </div>
+      </a>
 
-    <!-- Category Quick Menu -->
-    <div class="category-container">
-        <a href="#" class="category-item"><div class="category-icon">🌾</div>Broiler</a>
-        <a href="#" class="category-item"><div class="category-icon">🦆</div>Bebek</a>
-        <a href="#" class="category-item"><div class="category-icon">🐟</div>Ikan</a>
-        <a href="#" class="category-item"><div class="category-icon">🐈</div>Kucing</a>
-        <a href="#" class="category-item"><div class="category-icon">🔥</div>Promo</a>
-    </div>
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-xl relative">
+        <input 
+          type="text" 
+          placeholder="Cari pakan ayam, bebek, ikan, atau peternakan..." 
+          class="w-full pl-10 pr-4 py-2.5 bg-gray-100/80 hover:bg-gray-100 focus:bg-white rounded-full border border-transparent focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/10 text-sm transition-all"
+        />
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+      </div>
 
-    <div class="section-banner">
-        🔥 Kejar Diskon Pilihan Hari Ini
-    </div>
+      <!-- Quick Action / Audio Button -->
+      <button class="hidden sm:flex items-center gap-2 bg-brand-50 hover:bg-brand-100 text-brand-700 px-4 py-2 rounded-full font-semibold text-xs transition-colors border border-brand-200">
+        <i class="fa-solid fa-music text-brand-600"></i>
+        <span>Putar Musik</span>
+      </button>
 
-    <div class="container">
-        <div class="product-grid" id="product-list">
-            <div class="loading-text">Memuat katalog toko...</div>
-        </div>
     </div>
+  </header>
 
-    <div class="bottom-nav">
-        <a href="#" class="nav-item active">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-            Home
-        </a>
-        <a href="/admin.html" class="nav-item">
-            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-            Admin
-        </a>
-        <a href="https://wa.me/62895629485010" target="_blank" class="nav-item">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.84.5 3.56 1.37 5.04L2 22l5.12-1.37C8.59 21.5 10.28 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.62 0-3.13-.44-4.43-1.2l-.32-.19-3.14.84.84-3.11-.2-.33C3.91 14.89 3.43 13.5 3.43 12c0-4.73 3.84-8.57 8.57-8.57 4.73 0 8.57 3.84 8.57 8.57 0 4.73-3.84 8.57-8.57 8.57z"/></svg>
-            Kontak
-        </a>
-    </div>
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
 
-    <!-- Modal Popup Detail Produk -->
-    <div id="productModal" class="modal-overlay" onclick="tutupModal(event)">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span>Detail Produk</span>
-                <button class="modal-close" onclick="tutupModalBtn()">&times;</button>
+    <!-- Hero Banner Promo -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-800 via-brand-700 to-emerald-600 text-white p-6 md:p-10 shadow-xl shadow-brand-600/10">
+      <div class="relative z-10 max-w-xl space-y-3">
+        <span class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-emerald-100 uppercase tracking-wider">Promo Spesial Hari Ini</span>
+        <h2 class="text-2xl md:text-4xl font-extrabold leading-tight">Nutrisi Terbaik Untuk Ternak Sehat & Gemuk</h2>
+        <p class="text-emerald-100 text-sm md:text-base">Dapatkan diskon khusus hingga 15% untuk pembelian pakan broiler & bebek hari ini.</p>
+      </div>
+      <div class="absolute -right-10 -bottom-10 opacity-20 pointer-events-none">
+        <i class="fa-solid fa-cow text-[220px]"></i>
+      </div>
+    </section>
+
+    <!-- Kategori Pilihan -->
+    <section class="space-y-4">
+      <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-brand-600"></i> Kategori Pakan
+      </h3>
+      <div class="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-5 gap-3 text-center">
+        
+        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-drumstick-bite text-xl"></i>
+          </div>
+          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Broiler</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-feather text-xl"></i>
+          </div>
+          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Bebek</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-fish text-xl"></i>
+          </div>
+          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Ikan</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-cat text-xl"></i>
+          </div>
+          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Kucing</span>
+        </button>
+
+        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
+          <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-fire text-xl"></i>
+          </div>
+          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Promo</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- Flash Sale / Product List -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-bolt text-amber-500"></i> Kejar Diskon Hari Ini
+        </h3>
+        <a href="#" class="text-xs font-bold text-brand-600 hover:underline">Lihat Semua</a>
+      </div>
+
+      <!-- Grid Produk -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card Produk 1 -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="relative overflow-hidden bg-gray-100 aspect-square">
+              <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80" alt="Pakan Ayam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
             </div>
-            <div class="modal-body">
-                <img id="modalImg" src="" alt="Foto Produk">
-                <div id="modalTitle" class="modal-title"></div>
-                <div id="modalPrice" class="modal-price"></div>
-                <div id="modalStock" style="font-size: 11px; color: #31353b; margin-bottom: 8px;"></div>
-                <div id="modalDesc" class="modal-desc"></div>
-                <a id="modalWaBtn" href="#" target="_blank" class="btn-wa" style="display: block; text-align: center; text-decoration: none; padding: 10px; border-radius: 6px;">Beli via WhatsApp</a>
+            <div class="p-4 space-y-2">
+              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
+              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">Pakan Ayam Broiler BR-1 Premium</h4>
+              <p class="text-xs text-gray-500 line-clamp-2">Pakan berkadar protein tinggi untuk pertumbuhan optimal ayam broiler.</p>
+              <div class="pt-2">
+                <span class="text-xs text-gray-400 line-through">Rp 440.000</span>
+                <p class="text-lg font-extrabold text-brand-600">Rp 380.000 <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
+              </div>
             </div>
+          </div>
+          <div class="p-4 pt-0">
+            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20Pakan%20Broiler" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
+            </a>
+          </div>
         </div>
-    </div>
 
-    <script>
-        const nomorAdminWhatsApp = "62895629485010"; 
-        let semuaProduk = [];
-        const music = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicToggleBtn');
+        <!-- Card Produk 2 -->
+        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between">
+          <div>
+            <div class="relative overflow-hidden bg-gray-100 aspect-square">
+              <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80" alt="Pakan Bebek" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
+            </div>
+            <div class="p-4 space-y-2">
+              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
+              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">Pakan Bebek Petelur Premium</h4>
+              <p class="text-xs text-gray-500 line-clamp-2">Nutrisi lengkap untuk meningkatkan kualitas dan produksi telur bebek.</p>
+              <div class="pt-2">
+                <span class="text-xs text-gray-400 line-through">Rp 410.000</span>
+                <p class="text-lg font-extrabold text-brand-600">Rp 355.000 <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 pt-0">
+            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20Pakan%20Bebek" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
+            </a>
+          </div>
+        </div>
 
-        // Fungsi kontrol tombol musik
-        function toggleMusic() {
-            if (music.paused) {
-                music.play().then(() => {
-                    musicBtn.innerHTML = "⏸️ Matikan Musik";
-                    musicBtn.style.background = "#c8e6c9";
-                }).catch(e => {
-                    console.log("Audio diblokir browser.");
-                });
-            } else {
-                music.pause();
-                musicBtn.innerHTML = "🎵 Putar Musik";
-                musicBtn.style.background = "#e8f5e9";
-            }
-        }
+      </div>
+    </section>
 
-        // Memutar musik otomatis begitu pengguna menyentuh layar pertama kali
-        document.body.addEventListener('click', function() {
-            if (music.paused && music.currentTime === 0) {
-                music.play().then(() => {
-                    musicBtn.innerHTML = "⏸️ Matikan Musik";
-                    musicBtn.style.background = "#c8e6c9";
-                }).catch(() => {});
-            }
-        }, { once: true });
+  </main>
 
-        // Ambil data produk
-        fetch('/api/pakan')
-            .then(res => res.json())
-            .then(result => {
-                semuaProduk = result.data || [];
-                tampilkanProduk(semuaProduk);
-            });
+  <!-- Bottom Navigation untuk Tampilan Mobile -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-100 z-50 py-2 px-6 flex justify-around items-center">
+    <a href="#" class="flex flex-col items-center gap-1 text-brand-600">
+      <i class="fa-solid fa-house text-lg"></i>
+      <span class="text-[10px] font-semibold">Home</span>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
+      <i class="fa-solid fa-box text-lg"></i>
+      <span class="text-[10px] font-semibold">Produk</span>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
+      <i class="fa-solid fa-user-shield text-lg"></i>
+      <span class="text-[10px] font-semibold">Admin</span>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
+      <i class="fa-brands fa-whatsapp text-lg"></i>
+      <span class="text-[10px] font-semibold">Kontak</span>
+    </a>
+  </nav>
 
-        function tampilkanProduk(data) {
-            const grid = document.getElementById('product-list');
-            grid.innerHTML = '';
-            
-            if(data.length === 0) {
-                grid.innerHTML = '<div class="loading-text">Produk tidak ditemukan.</div>';
-                return;
-            }
-
-            data.forEach(item => {
-                const pesanWa = encodeURIComponent(`Halo Pak Dehpri, saya mau pesan produk *${item.nama}* (Stok: ${item.stok} KG/Sak) seharga Rp ${item.harga.toLocaleString('id-ID')}. Mohon konfirmasinya.`);
-                const linkWa = `https://wa.me/${nomorAdminWhatsApp}?text=${pesanWa}`;
-
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <div class="discount-badge">15% OFF</div>
-                    <div>
-                        <div class="product-img-wrapper" onclick='bukaModal(${JSON.stringify(item)})'>
-                            <img src="${item.gambar}" alt="${item.nama}" loading="lazy">
-                        </div>
-                        <div class="product-body">
-                            <div class="product-name" onclick='bukaModal(${JSON.stringify(item)})'>${item.nama}</div>
-                            <div class="product-price">Rp ${item.harga.toLocaleString('id-ID')}</div>
-                            <div class="product-stock">Stok: <b>${item.stok} KG/Sak</b></div>
-                            <span class="badge-official">Official Store</span>
-                        </div>
-                    </div>
-                    <div class="card-footer-action">
-                        <a href="${linkWa}" target="_blank" class="btn-wa">
-                            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-                            Beli via WhatsApp
-                        </a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // Fungsi Modal Detail Produk
-        function bukaModal(item) {
-            const pesanWa = encodeURIComponent(`Halo Pak Dehpri, saya ingin memesan produk *${item.nama}* seharga Rp ${item.harga.toLocaleString('id-ID')}. Apakah stoknya tersedia?`);
-            const linkWa = `https://wa.me/${nomorAdminWhatsApp}?text=${pesanWa}`;
-
-            document.getElementById('modalImg').src = item.gambar;
-            document.getElementById('modalTitle').innerText = item.nama;
-            document.getElementById('modalPrice').innerText = `Rp ${item.harga.toLocaleString('id-ID')}`;
-            document.getElementById('modalStock').innerHTML = `Stok Tersedia: <b>${item.stok} KG/Sak</b>`;
-            document.getElementById('modalDesc').innerText = item.deskripsi ? item.deskripsi : 'Belum ada deskripsi untuk produk ini.';
-            document.getElementById('modalWaBtn').href = linkWa;
-
-            document.getElementById('productModal').style.display = 'flex';
-        }
-
-        function tutupModalBtn() {
-            document.getElementById('productModal').style.display = 'none';
-        }
-
-        function tutupModal(event) {
-            if (event.target.id === 'productModal') {
-                document.getElementById('productModal').style.display = 'none';
-            }
-        }
-
-        // Fitur Pencarian
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const keyword = e.target.value.toLowerCase();
-            const hasilFilter = semuaProduk.filter(item => 
-                item.nama.toLowerCase().includes(keyword)
-            );
-            tampilkanProduk(hasilFilter);
-        });
-    </script>
 </body>
 </html>
