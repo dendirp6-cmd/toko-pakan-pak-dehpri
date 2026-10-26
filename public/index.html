@@ -56,13 +56,14 @@
       <div class="flex-1 max-w-xl relative">
         <input 
           type="text" 
+          id="search-input"
           placeholder="Cari pakan ayam, bebek, ikan, atau peternakan..." 
           class="w-full pl-10 pr-4 py-2.5 bg-gray-100/80 hover:bg-gray-100 focus:bg-white rounded-full border border-transparent focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/10 text-sm transition-all"
         />
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
       </div>
 
-      <!-- Quick Action / Audio Button & Navigasi Admin (Desktop) -->
+      <!-- Quick Action Buttons -->
       <div class="hidden sm:flex items-center gap-2">
         <button class="flex items-center gap-2 bg-brand-50 hover:bg-brand-100 text-brand-700 px-4 py-2 rounded-full font-semibold text-xs transition-colors border border-brand-200">
           <i class="fa-solid fa-music text-brand-600"></i>
@@ -98,7 +99,7 @@
       <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
         <i class="fa-solid fa-layer-group text-brand-600"></i> Kategori Pakan
       </h3>
-      <div class="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-5 gap-3 text-center">
+      <div class="grid grid-cols-5 gap-3 text-center">
         
         <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
           <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -138,7 +139,7 @@
       </div>
     </section>
 
-    <!-- Flash Sale / Product List -->
+    <!-- Product Grid Container (Dinamis) -->
     <section class="space-y-4" id="produk">
       <div class="flex items-center justify-between">
         <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
@@ -147,63 +148,15 @@
         <a href="#produk" class="text-xs font-bold text-brand-600 hover:underline">Lihat Semua</a>
       </div>
 
-      <!-- Grid Produk -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- Card Produk 1 -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between">
-          <div>
-            <div class="relative overflow-hidden bg-gray-100 aspect-square">
-              <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80" alt="Pakan Ayam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
-            </div>
-            <div class="p-4 space-y-2">
-              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
-              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">Pakan Ayam Broiler BR-1 Premium</h4>
-              <p class="text-xs text-gray-500 line-clamp-2">Pakan berkadar protein tinggi untuk pertumbuhan optimal ayam broiler.</p>
-              <div class="pt-2">
-                <span class="text-xs text-gray-400 line-through">Rp 440.000</span>
-                <p class="text-lg font-extrabold text-brand-600">Rp 380.000 <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 pt-0">
-            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20Pakan%20Broiler" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
-              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
-            </a>
-          </div>
-        </div>
-
-        <!-- Card Produk 2 -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between">
-          <div>
-            <div class="relative overflow-hidden bg-gray-100 aspect-square">
-              <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80" alt="Pakan Bebek" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
-            </div>
-            <div class="p-4 space-y-2">
-              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
-              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">Pakan Bebek Petelur Premium</h4>
-              <p class="text-xs text-gray-500 line-clamp-2">Nutrisi lengkap untuk meningkatkan kualitas dan produksi telur bebek.</p>
-              <div class="pt-2">
-                <span class="text-xs text-gray-400 line-through">Rp 410.000</span>
-                <p class="text-lg font-extrabold text-brand-600">Rp 355.000 <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 pt-0">
-            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20Pakan%20Bebek" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
-              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
-            </a>
-          </div>
-        </div>
-
+      <!-- Container tempat produk dari localStorage dirender -->
+      <div id="product-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card produk akan otomatis muncul/hilang lewat JS -->
       </div>
     </section>
 
   </main>
 
-  <!-- Bottom Navigation untuk Tampilan Mobile -->
+  <!-- Bottom Navigation Mobile -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-100 z-50 py-2 px-6 flex justify-around items-center">
     <a href="/" class="flex flex-col items-center gap-1 text-brand-600">
       <i class="fa-solid fa-house text-lg"></i>
@@ -222,6 +175,83 @@
       <span class="text-[10px] font-semibold">Kontak</span>
     </a>
   </nav>
+
+  <!-- Script Sinkronisasi dengan LocalStorage -->
+  <script>
+    const defaultData = [
+      {
+        id: "1",
+        nama: "Pakan Ayam Broiler BR-1 Premium",
+        harga: 380000,
+        stok: 50,
+        gambar: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80",
+        deskripsi: "Pakan berkadar protein tinggi untuk pertumbuhan optimal ayam broiler."
+      },
+      {
+        id: "2",
+        nama: "Pakan Bebek Petelur Premium",
+        harga: 355000,
+        stok: 30,
+        gambar: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80",
+        deskripsi: "Nutrisi lengkap untuk meningkatkan kualitas dan produksi telur bebek."
+      }
+    ];
+
+    function getProducts() {
+      const stored = localStorage.getItem('dataPakanStore');
+      if (!stored) {
+        localStorage.setItem('dataPakanStore', JSON.stringify(defaultData));
+        return defaultData;
+      }
+      return JSON.parse(stored);
+    }
+
+    function renderProducts() {
+      const products = getProducts();
+      const container = document.getElementById('product-container');
+      container.innerHTML = '';
+
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center space-y-2 bg-white rounded-2xl border border-gray-100">
+            <i class="fa-solid fa-box-open text-4xl text-gray-300"></i>
+            <p class="text-sm font-semibold text-gray-500">Belum ada produk yang tersedia saat ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      products.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="relative overflow-hidden bg-gray-100 aspect-square">
+              <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
+            </div>
+            <div class="p-4 space-y-2">
+              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
+              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">${item.nama}</h4>
+              <p class="text-xs text-gray-500 line-clamp-2">${item.deskripsi || '-'}</p>
+              <div class="pt-2">
+                <p class="text-lg font-extrabold text-brand-600">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')} <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
+                <p class="text-[11px] text-gray-400">Stok: ${item.stok}</p>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 pt-0">
+            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20${encodeURIComponent(item.nama)}" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    renderProducts();
+  </script>
 
 </body>
 </html>
