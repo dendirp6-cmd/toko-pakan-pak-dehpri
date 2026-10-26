@@ -42,7 +42,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2 group">
+      <a href="/" class="flex items-center gap-2 group">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
           <i class="fa-solid fa-wheat-awn text-xl"></i>
         </div>
@@ -62,11 +62,18 @@
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
       </div>
 
-      <!-- Quick Action / Audio Button -->
-      <button class="hidden sm:flex items-center gap-2 bg-brand-50 hover:bg-brand-100 text-brand-700 px-4 py-2 rounded-full font-semibold text-xs transition-colors border border-brand-200">
-        <i class="fa-solid fa-music text-brand-600"></i>
-        <span>Putar Musik</span>
-      </button>
+      <!-- Quick Action / Audio Button & Navigasi Admin (Desktop) -->
+      <div class="hidden sm:flex items-center gap-2">
+        <button class="flex items-center gap-2 bg-brand-50 hover:bg-brand-100 text-brand-700 px-4 py-2 rounded-full font-semibold text-xs transition-colors border border-brand-200">
+          <i class="fa-solid fa-music text-brand-600"></i>
+          <span>Putar Musik</span>
+        </button>
+
+        <a href="/admin.html" class="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-4 py-2 rounded-full font-semibold text-xs transition-colors shadow-md">
+          <i class="fa-solid fa-user-shield text-emerald-400"></i>
+          <span>Panel Admin</span>
+        </a>
+      </div>
 
     </div>
   </header>
@@ -132,12 +139,12 @@
     </section>
 
     <!-- Flash Sale / Product List -->
-    <section class="space-y-4">
+    <section class="space-y-4" id="produk">
       <div class="flex items-center justify-between">
         <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
           <i class="fa-solid fa-bolt text-amber-500"></i> Kejar Diskon Hari Ini
         </h3>
-        <a href="#" class="text-xs font-bold text-brand-600 hover:underline">Lihat Semua</a>
+        <a href="#produk" class="text-xs font-bold text-brand-600 hover:underline">Lihat Semua</a>
       </div>
 
       <!-- Grid Produk -->
@@ -198,19 +205,19 @@
 
   <!-- Bottom Navigation untuk Tampilan Mobile -->
   <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-100 z-50 py-2 px-6 flex justify-around items-center">
-    <a href="#" class="flex flex-col items-center gap-1 text-brand-600">
+    <a href="/" class="flex flex-col items-center gap-1 text-brand-600">
       <i class="fa-solid fa-house text-lg"></i>
       <span class="text-[10px] font-semibold">Home</span>
     </a>
-    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
+    <a href="#produk" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
       <i class="fa-solid fa-box text-lg"></i>
       <span class="text-[10px] font-semibold">Produk</span>
     </a>
-    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
+    <a href="/admin.html" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
       <i class="fa-solid fa-user-shield text-lg"></i>
       <span class="text-[10px] font-semibold">Admin</span>
     </a>
-    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
+    <a href="https://wa.me/6281234567890" target="_blank" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
       <i class="fa-brands fa-whatsapp text-lg"></i>
       <span class="text-[10px] font-semibold">Kontak</span>
     </a>
