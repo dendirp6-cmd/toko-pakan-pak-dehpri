@@ -20,4 +20,12 @@ app.get('/api/pakan', (req, res) => {
   });
 });
 
+// Jalankan server lokal hanya saat dijalankan langsung
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server berjalan di http://localhost:${PORT}`);
+  });
+}
+
 module.exports = app;
