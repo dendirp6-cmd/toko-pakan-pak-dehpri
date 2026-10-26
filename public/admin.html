@@ -1,220 +1,203 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toko Pakan Pak Dehpri - Solusi Pakan Ternak Berkualitas</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-            }
-          }
-        }
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Pakan Ternak Pak Dehpri</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f3f4f5; margin: 0; padding: 15px; color: #31353b; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2, h3 { color: #03ac03; text-align: center; margin-top: 0; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; font-size: 12px; }
+        input, textarea { width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; box-sizing: border-box; font-size: 13px; }
+        button { background-color: #03ac03; color: white; border: none; padding: 10px; width: 100%; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #028a02; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #6d7582; text-decoration: none; font-size: 13px; }
+        hr { border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0; }
+        
+        /* Style untuk Tabel Data Produk */
+        .table-responsive { width: 100%; overflow-x: auto; margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
+        th, td { padding: 8px; border: 1px solid #e5e7eb; vertical-align: middle; }
+        th { background-color: #f9fafb; color: #31353b; font-weight: bold; }
+        img.thumb { width: 35px; height: 35px; object-fit: cover; border-radius: 4px; }
+        .btn-delete { background-color: #dc3545; color: white; border: none; padding: 5px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; }
+        .btn-delete:hover { background-color: #c82333; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased pb-24 md:pb-10">
+<body>
 
-  <!-- Header / Navbar Sticky -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2 group">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-wheat-awn text-xl"></i>
-        </div>
+    <div class="container">
+        <h2>🛠️ Panel Admin Toko</h2>
+        
+        <!-- Form Tambah Produk -->
+        <form id="form-tambah">
+            <h3>Tambah Produk Pakan</h3>
+            <div class="form-group">
+                <label>Nama Produk Pakan:</label>
+                <input type="text" id="nama" required placeholder="Contoh: Pakan Perkutut Phoenix">
+            </div>
+            <div class="form-group">
+                <label>Stok (KG / Sak):</label>
+                <input type="number" id="stok" required placeholder="Contoh: 100">
+            </div>
+            <div class="form-group">
+                <label>Harga (Rp):</label>
+                <input type="number" id="harga" required placeholder="Contoh: 15000">
+            </div>
+            <div class="form-group">
+                <label>Deskripsi Produk:</label>
+                <textarea id="deskripsi" rows="2" placeholder="Special Formula Anti Stress..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Foto Produk dari Galeri HP:</label>
+                <input type="file" id="gambarProduk" accept="image/*" required>
+            </div>
+            <button type="submit">Simpan Produk Baru</button>
+        </form>
+
+        <hr>
+
+        <!-- DataTable / Tabel Data Produk -->
         <div>
-          <h1 class="font-bold text-lg leading-tight text-gray-900 group-hover:text-brand-600 transition-colors">Pak Dehpri</h1>
-          <p class="text-[10px] text-gray-500 font-medium -mt-1">Pakan Ternak Premium</p>
+            <h3>📦 Kelola Data Produk</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nama & Deskripsi</th>
+                            <th>Harga & Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabel-produk-body">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #6d7582;">Memuat data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </a>
 
-      <!-- Search Bar -->
-      <div class="flex-1 max-w-xl relative">
-        <input 
-          type="text" 
-          placeholder="Cari pakan ayam, bebek, ikan, atau peternakan..." 
-          class="w-full pl-10 pr-4 py-2.5 bg-gray-100/80 hover:bg-gray-100 focus:bg-white rounded-full border border-transparent focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/10 text-sm transition-all"
-        />
-        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-      </div>
+        <hr>
 
-      <!-- Quick Action / Audio Button -->
-      <button class="hidden sm:flex items-center gap-2 bg-brand-50 hover:bg-brand-100 text-brand-700 px-4 py-2 rounded-full font-semibold text-xs transition-colors border border-brand-200">
-        <i class="fa-solid fa-music text-brand-600"></i>
-        <span>Putar Musik</span>
-      </button>
+        <!-- Form Upload Musik -->
+        <form id="form-musik">
+            <h3>🎵 Upload Musik Latar dari HP</h3>
+            <div class="form-group">
+                <label>Pilih File Musik (.mp3):</label>
+                <input type="file" id="fileMusik" accept="audio/mp3,audio/*" required>
+            </div>
+            <button type="submit" style="background-color: #25d366;">Upload & Simpan Musik</button>
+        </form>
 
+        <a href="/" class="back-link">⬅️ Kembali ke Halaman Utama Toko</a>
     </div>
-  </header>
 
-  <!-- Main Container -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    <script>
+        // Fungsi Memuat Data ke Tabel Admin
+        function muatTabelAdmin() {
+            fetch('/api/pakan')
+                .then(res => res.json())
+                .then(result => {
+                    const tbody = document.getElementById('tabel-produk-body');
+                    tbody.innerHTML = '';
+                    
+                    const data = result.data || [];
+                    if(data.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #6d7582;">Belum ada produk tersimpan.</td></tr>`;
+                        return;
+                    }
 
-    <!-- Hero Banner Promo -->
-    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-800 via-brand-700 to-emerald-600 text-white p-6 md:p-10 shadow-xl shadow-brand-600/10">
-      <div class="relative z-10 max-w-xl space-y-3">
-        <span class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-emerald-100 uppercase tracking-wider">Promo Spesial Hari Ini</span>
-        <h2 class="text-2xl md:text-4xl font-extrabold leading-tight">Nutrisi Terbaik Untuk Ternak Sehat & Gemuk</h2>
-        <p class="text-emerald-100 text-sm md:text-base">Dapatkan diskon khusus hingga 15% untuk pembelian pakan broiler & bebek hari ini.</p>
-      </div>
-      <div class="absolute -right-10 -bottom-10 opacity-20 pointer-events-none">
-        <i class="fa-solid fa-cow text-[220px]"></i>
-      </div>
-    </section>
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="text-align: center;"><img src="${item.gambar}" class="thumb" alt="Foto"></td>
+                            <td>
+                                <b>${item.nama}</b><br>
+                                <span style="color: #6d7582; font-size: 10px;">${item.deskripsi || '-'}</span>
+                            </td>
+                            <td>
+                                Rp ${item.harga.toLocaleString('id-ID')}<br>
+                                <b>Stok:</b> ${item.stok}
+                            </td>
+                            <td style="text-align: center;">
+                                <button class="btn-delete" onclick="hapusProduk(${item.id})">Hapus</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+        }
 
-    <!-- Kategori Pilihan -->
-    <section class="space-y-4">
-      <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
-        <i class="fa-solid fa-layer-group text-brand-600"></i> Kategori Pakan
-      </h3>
-      <div class="grid grid-cols-5 sm:grid-cols-5 md:grid-cols-5 gap-3 text-center">
-        
-        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
-          <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-drumstick-bite text-xl"></i>
-          </div>
-          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Broiler</span>
-        </button>
+        // Panggil saat halaman dibuka
+        muatTabelAdmin();
 
-        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
-          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-feather text-xl"></i>
-          </div>
-          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Bebek</span>
-        </button>
+        // Fungsi Hapus Produk
+        function hapusProduk(id) {
+            if (confirm('Yakin ingin menghapus produk ini?')) {
+                fetch(`/api/pakan/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(res => res.json())
+                .then(result => {
+                    alert(result.message);
+                    muatTabelAdmin(); // Refresh tabel setelah dihapus
+                })
+                .catch(err => alert('Gagal menghapus produk.'));
+            }
+        }
 
-        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-fish text-xl"></i>
-          </div>
-          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Ikan</span>
-        </button>
+        // Handle Form Tambah Produk
+        document.getElementById('form-tambah').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('nama', document.getElementById('nama').value);
+            formData.append('stok', document.getElementById('stok').value);
+            formData.append('harga', document.getElementById('harga').value);
+            formData.append('deskripsi', document.getElementById('deskripsi').value);
+            
+            const fileInput = document.getElementById('gambarProduk');
+            if (fileInput.files.length > 0) {
+                formData.append('gambarProduk', fileInput.files[0]);
+            }
 
-        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
-          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-cat text-xl"></i>
-          </div>
-          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Kucing</span>
-        </button>
+            fetch('/api/pakan', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(result => {
+                alert(result.message);
+                document.getElementById('form-tambah').reset();
+                muatTabelAdmin(); // Refresh tabel setelah produk ditambah
+            })
+            .catch(err => alert('Gagal menambahkan produk.'));
+        });
 
-        <button class="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white shadow-sm border border-gray-100 hover:border-brand-500 hover:shadow-md transition-all group">
-          <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-fire text-xl"></i>
-          </div>
-          <span class="text-xs font-semibold text-gray-700 group-hover:text-brand-600">Promo</span>
-        </button>
+        // Handle Upload Musik
+        document.getElementById('form-musik').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('fileMusik');
+            if (fileInput.files.length === 0) return;
 
-      </div>
-    </section>
+            const formData = new FormData();
+            formData.append('fileMusik', fileInput.files[0]);
 
-    <!-- Flash Sale / Product List -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
-          <i class="fa-solid fa-bolt text-amber-500"></i> Kejar Diskon Hari Ini
-        </h3>
-        <a href="#" class="text-xs font-bold text-brand-600 hover:underline">Lihat Semua</a>
-      </div>
-
-      <!-- Grid Produk -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <!-- Card Produk 1 -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between">
-          <div>
-            <div class="relative overflow-hidden bg-gray-100 aspect-square">
-              <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=600&q=80" alt="Pakan Ayam" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
-            </div>
-            <div class="p-4 space-y-2">
-              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
-              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">Pakan Ayam Broiler BR-1 Premium</h4>
-              <p class="text-xs text-gray-500 line-clamp-2">Pakan berkadar protein tinggi untuk pertumbuhan optimal ayam broiler.</p>
-              <div class="pt-2">
-                <span class="text-xs text-gray-400 line-through">Rp 440.000</span>
-                <p class="text-lg font-extrabold text-brand-600">Rp 380.000 <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 pt-0">
-            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20Pakan%20Broiler" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
-              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
-            </a>
-          </div>
-        </div>
-
-        <!-- Card Produk 2 -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col justify-between">
-          <div>
-            <div class="relative overflow-hidden bg-gray-100 aspect-square">
-              <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80" alt="Pakan Bebek" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              <span class="absolute top-3 left-3 bg-red-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">15% OFF</span>
-            </div>
-            <div class="p-4 space-y-2">
-              <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 border border-brand-200 px-2 py-0.5 rounded-md">Official Store</span>
-              <h4 class="font-bold text-gray-900 text-sm line-clamp-2 group-hover:text-brand-600 transition-colors">Pakan Bebek Petelur Premium</h4>
-              <p class="text-xs text-gray-500 line-clamp-2">Nutrisi lengkap untuk meningkatkan kualitas dan produksi telur bebek.</p>
-              <div class="pt-2">
-                <span class="text-xs text-gray-400 line-through">Rp 410.000</span>
-                <p class="text-lg font-extrabold text-brand-600">Rp 355.000 <span class="text-xs font-normal text-gray-500">/ Sak</span></p>
-              </div>
-            </div>
-          </div>
-          <div class="p-4 pt-0">
-            <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20beli%20Pakan%20Bebek" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md shadow-brand-600/20">
-              <i class="fa-brands fa-whatsapp text-sm"></i> Beli via WhatsApp
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Bottom Navigation untuk Tampilan Mobile -->
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-gray-100 z-50 py-2 px-6 flex justify-around items-center">
-    <a href="#" class="flex flex-col items-center gap-1 text-brand-600">
-      <i class="fa-solid fa-house text-lg"></i>
-      <span class="text-[10px] font-semibold">Home</span>
-    </a>
-    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
-      <i class="fa-solid fa-box text-lg"></i>
-      <span class="text-[10px] font-semibold">Produk</span>
-    </a>
-    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
-      <i class="fa-solid fa-user-shield text-lg"></i>
-      <span class="text-[10px] font-semibold">Admin</span>
-    </a>
-    <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600">
-      <i class="fa-brands fa-whatsapp text-lg"></i>
-      <span class="text-[10px] font-semibold">Kontak</span>
-    </a>
-  </nav>
+            fetch('/api/upload-musik', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(result => {
+                alert(result.message);
+                document.getElementById('form-musik').reset();
+            });
+        });
+    </script>
 
 </body>
 </html>
