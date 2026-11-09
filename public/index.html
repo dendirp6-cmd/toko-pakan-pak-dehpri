@@ -21,7 +21,7 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .image-lightbox { background: rgba(2, 6, 23, 0.88); }
-        .product-image-button { cursor: zoom-in; }
+        .product-image-button { cursor: zoom-in; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -273,9 +273,9 @@
                 card.innerHTML = `
                     <div>
                         <div class="relative h-64 overflow-hidden bg-gray-50">
-                            <button type="button" class="product-image-button w-full h-full block" onclick="bukaGambar('${item.gambar}', '${item.nama.replace(/'/g, "\\'")}')" aria-label="Buka gambar ${item.nama}">
+                            <a href="${item.gambar}" target="_blank" rel="noopener" class="product-image-button w-full h-full block" onclick="bukaGambar('${item.gambar}', '${item.nama.replace(/'/g, "\\'")}'); return false;" aria-label="Buka gambar ${item.nama}">
                                 <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            </button>
+                            </a>
                             <div class="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-md">15% OFF</div>
                             <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">Stok: ${item.stok}</div>
                         </div>
