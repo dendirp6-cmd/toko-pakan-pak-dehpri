@@ -182,7 +182,7 @@
                 ['1', '2', '3', '4'].includes(String(item.id)) ||
                 String(item.gambar || '').includes('storage.googleapis.com')
             );
-            if (!stored || isDemoData) {
+            if (!stored || storedProducts.length === 0 || isDemoData) {
                 localStorage.setItem('dataPakanStore', JSON.stringify(defaultData));
                 return defaultData;
             }
