@@ -273,7 +273,7 @@
                 card.innerHTML = `
                     <div>
                         <div class="relative h-64 overflow-hidden bg-gray-50">
-                            <a href="${item.gambar}" target="_blank" rel="noopener" class="product-image-button w-full h-full block" onclick="bukaGambar('${item.gambar}', '${item.nama.replace(/'/g, "\\'")}'); return false;" aria-label="Buka gambar ${item.nama}">
+                            <a href="${item.gambar}" target="_blank" rel="noopener" class="product-image-button w-full h-full block" data-lightbox-src="${item.gambar}" data-lightbox-name="${item.nama.replace(/"/g, '&quot;')}" aria-label="Buka gambar ${item.nama}">
                                 <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             </a>
                             <div class="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-md">15% OFF</div>
@@ -314,6 +314,14 @@
             document.getElementById('imageLightbox').classList.remove('flex');
             document.body.classList.remove('overflow-hidden');
         }
+
+        // Delegated click bekerja lebih konsisten pada tap Android dan iPhone.
+        document.addEventListener('click', event => {
+            const link = event.target.closest('[data-lightbox-src]');
+            if (!link) return;
+            event.preventDefault();
+            bukaGambar(link.dataset.lightboxSrc, link.dataset.lightboxName);
+        });
 
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape') tutupGambar();

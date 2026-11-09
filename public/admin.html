@@ -209,7 +209,7 @@
                 tr.className = "hover:bg-gray-50/50 transition-colors";
                 tr.innerHTML = `
                     <td class="p-4 text-center">
-                        <a href="${item.gambar}" target="_blank" rel="noopener" class="admin-product-image w-12 h-12 mx-auto block" onclick="bukaGambar('${item.gambar}', '${item.nama.replace(/'/g, "\\'")}'); return false;" aria-label="Buka gambar ${item.nama}">
+                        <a href="${item.gambar}" target="_blank" rel="noopener" class="admin-product-image w-12 h-12 mx-auto block" data-lightbox-src="${item.gambar}" data-lightbox-name="${item.nama.replace(/"/g, '&quot;')}" aria-label="Buka gambar ${item.nama}">
                             <img src="${item.gambar}" class="w-12 h-12 object-cover rounded-xl border border-gray-100 shadow-sm" alt="${item.nama}">
                         </a>
                     </td>
@@ -254,6 +254,14 @@
             document.getElementById('imageLightbox').classList.remove('flex');
             document.body.classList.remove('overflow-hidden');
         }
+
+        // Delegated click bekerja lebih konsisten pada tap Android dan iPhone.
+        document.addEventListener('click', event => {
+            const link = event.target.closest('[data-lightbox-src]');
+            if (!link) return;
+            event.preventDefault();
+            bukaGambar(link.dataset.lightboxSrc, link.dataset.lightboxName);
+        });
 
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape') tutupGambar();
