@@ -158,7 +158,7 @@
         </div>
 
         <!-- Target Render LocalStorage -->
-        <div id="product-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="product-container" class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
             <!-- Card produk akan otomatis di-render oleh Script JS di bawah -->
         </div>
     </section>
@@ -269,28 +269,28 @@
 
             products.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "bg-white rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all group flex flex-col justify-between";
+                card.className = "bg-white rounded-xl sm:rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all group flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
-                        <div class="relative h-64 overflow-hidden bg-gray-50">
+                        <div class="relative h-28 sm:h-64 overflow-hidden bg-gray-50">
                             <a href="${item.gambar}" target="_blank" rel="noopener" class="product-image-button w-full h-full block" data-lightbox-src="${item.gambar}" data-lightbox-name="${item.nama.replace(/"/g, '&quot;')}" aria-label="Buka gambar ${item.nama}">
                                 <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             </a>
-                            <div class="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-md">15% OFF</div>
-                            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">Stok: ${item.stok}</div>
+                            <div class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-red-500 text-white text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-md">15% OFF</div>
+                            <div class="absolute top-2 right-2 sm:top-4 sm:right-4 bg-white/90 backdrop-blur text-emerald-700 text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-sm">Stok: ${item.stok}</div>
                         </div>
-                        <div class="p-6 space-y-2">
-                            <span class="text-xs text-gray-400 uppercase font-medium">Official Store</span>
-                            <h3 class="font-bold text-gray-900 text-base line-clamp-2 group-hover:text-emerald-600 transition-colors">${item.nama}</h3>
-                            <p class="text-xs text-gray-500 line-clamp-2">${item.deskripsi || '-'}</p>
+                        <div class="p-2 sm:p-6 space-y-1 sm:space-y-2">
+                            <span class="text-[8px] sm:text-xs text-gray-400 uppercase font-medium">Official Store</span>
+                            <h3 class="font-bold text-gray-900 text-[11px] sm:text-base line-clamp-2 group-hover:text-emerald-600 transition-colors">${item.nama}</h3>
+                            <p class="text-[9px] sm:text-xs text-gray-500 line-clamp-2">${item.deskripsi || '-'}</p>
                             <div class="pt-2 flex items-center justify-between">
-                                <span class="text-lg font-bold text-emerald-600">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</span>
+                                <span class="text-xs sm:text-lg font-bold text-emerald-600">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 pt-0">
-                        <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20pesan%20${encodeURIComponent(item.nama)}" target="_blank" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20">
-                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <div class="p-2 sm:p-6 pt-0">
+                        <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Dehpri,%20saya%20mau%20pesan%20${encodeURIComponent(item.nama)}" target="_blank" class="w-full bg-emerald-600 text-white py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold flex items-center justify-center gap-1 sm:gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 text-[9px] sm:text-base">
+                            <i class="fa-brands fa-whatsapp text-xs sm:text-lg"></i>
                             Pesan Sekarang
                         </a>
                     </div>
