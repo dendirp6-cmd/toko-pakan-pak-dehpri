@@ -1,6 +1,7 @@
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 
 app.use(express.json());
@@ -8,25 +9,10 @@ app.use(express.json());
 // 1. Menyajikan file statis (HTML, CSS, Gambar, Audio) dari folder root/public
 app.use(express.static(path.join(__dirname, 'public'))); // Sesuaikan folder tempat index.html disimpan (misal: 'public' atau '.')
 
-// 2. Sample Data API Pakan
-const pakanData = [
-  {
-    id: 1,
-    nama: "Pakan Ayam Broiler BR-1",
-    harga: 380000,
-    stok: 50,
-    gambar: "https://via.placeholder.com/300x280?text=Pakan+Broiler",
-    deskripsi: "Pakan berkadar protein tinggi cocok untuk pertumbuhan ayam broiler usia 1-21 hari."
-  },
-  {
-    id: 2,
-    nama: "Pakan Bebek Petelur Premium",
-    harga: 355000,
-    stok: 30,
-    gambar: "https://via.placeholder.com/300x280?text=Pakan+Bebek",
-    deskripsi: "Mengandung kalsium tinggi untuk meningkatkan produksi dan kualitas cangkang telur."
-  }
-];
+// 2. Data produk dibaca dari data.json agar gambar di public/uploads ikut tampil.
+const pakanData = JSON.parse(
+  fs.readFileSync(path.join(__dirname, 'data.json'), 'utf8')
+);
 
 // 3. API Route
 app.get('/api/pakan', (req, res) => {

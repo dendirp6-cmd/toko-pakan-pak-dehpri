@@ -223,52 +223,25 @@
 
     <!-- Script Sinkronisasi LocalStorage untuk Tampilan UX Pilot -->
     <script>
-        const defaultData = [
-            {
-                id: "1",
-                nama: "Pakan Ayam Broiler Premium (50kg)",
-                harga: 425000,
-                stok: 50,
-                gambar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/gen_a8b8e00158_9b1f07d81d8e5fb8.png",
-                deskripsi: "Pakan berkadar protein tinggi untuk pertumbuhan optimal ayam broiler."
-            },
-            {
-                id: "2",
-                nama: "Pakan Bebek Petelur Berkualitas",
-                harga: 380000,
-                stok: 30,
-                gambar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/gen_a8b8e00158_9692e9ce95daca77.png",
-                deskripsi: "Nutrisi lengkap untuk meningkatkan kualitas dan produksi telur bebek."
-            },
-            {
-                id: "3",
-                nama: "Pelet Ikan Nila Protein Tinggi",
-                harga: 210000,
-                stok: 25,
-                gambar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/gen_a8b8e00158_75b0d719731e7e53.png",
-                deskripsi: "Pakan pelet apung berkualitas untuk mempercepat pembesaran ikan nila."
-            },
-            {
-                id: "4",
-                nama: "Konsentrat Sapi Penggemukan",
-                harga: 550000,
-                stok: 15,
-                gambar: "https://storage.googleapis.com/uxpilot-auth.appspot.com/gen_a8b8e00158_e679179dc6633b1e.png",
-                deskripsi: "Pakan konsentrat khusus untuk program penggemukan sapi secara efektif."
-            }
-        ];
-
-        function getProducts() {
+        async function getProducts() {
             const stored = localStorage.getItem('dataPakanStore');
-            if (!stored) {
-                localStorage.setItem('dataPakanStore', JSON.stringify(defaultData));
-                return defaultData;
+            const storedProducts = stored ? JSON.parse(stored) : [];
+            const isDemoData = storedProducts.length > 0 && storedProducts.every(item =>
+                ['1', '2', '3', '4'].includes(String(item.id)) ||
+                String(item.gambar || '').includes('storage.googleapis.com')
+            );
+            if (!stored || isDemoData) {
+                const response = await fetch('/api/pakan');
+                const result = await response.json();
+                const products = result.data || [];
+                localStorage.setItem('dataPakanStore', JSON.stringify(products));
+                return products;
             }
-            return JSON.parse(stored);
+            return storedProducts;
         }
 
-        function renderProducts() {
-            const products = getProducts();
+        async function renderProducts() {
+            const products = await getProducts();
             const container = document.getElementById('product-container');
             container.innerHTML = '';
 
