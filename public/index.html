@@ -20,6 +20,8 @@
         .sticky-nav { position: sticky; top: 0; z-index: 50; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .image-lightbox { background: rgba(2, 6, 23, 0.88); }
+        .product-image-button { cursor: zoom-in; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -161,6 +163,15 @@
         </div>
     </section>
 
+    <!-- Popup gambar produk -->
+    <div id="imageLightbox" class="image-lightbox fixed inset-0 z-[100] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Pratinjau gambar produk" onclick="tutupGambar(event)">
+        <button type="button" onclick="tutupGambar()" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/15 text-white text-2xl hover:bg-white/25 transition-colors" aria-label="Tutup gambar">&times;</button>
+        <div class="max-w-5xl max-h-[90vh] flex flex-col items-center gap-3" onclick="event.stopPropagation()">
+            <img id="lightboxImage" src="" alt="" class="max-w-full max-h-[78vh] object-contain rounded-2xl shadow-2xl">
+            <p id="lightboxCaption" class="text-white font-semibold text-center"></p>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer id="footer" class="bg-emerald-950 text-emerald-100 py-12 md:pb-12 pb-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -262,7 +273,9 @@
                 card.innerHTML = `
                     <div>
                         <div class="relative h-64 overflow-hidden bg-gray-50">
-                            <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <button type="button" class="product-image-button w-full h-full block" onclick="bukaGambar('${item.gambar}', '${item.nama.replace(/'/g, "\\'")}')" aria-label="Buka gambar ${item.nama}">
+                                <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            </button>
                             <div class="absolute top-4 left-4 bg-red-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-md">15% OFF</div>
                             <div class="absolute top-4 right-4 bg-white/90 backdrop-blur text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">Stok: ${item.stok}</div>
                         </div>
@@ -285,6 +298,26 @@
                 container.appendChild(card);
             });
         }
+
+        function bukaGambar(src, nama) {
+            document.getElementById('lightboxImage').src = src;
+            document.getElementById('lightboxImage').alt = nama;
+            document.getElementById('lightboxCaption').textContent = nama;
+            document.getElementById('imageLightbox').classList.remove('hidden');
+            document.getElementById('imageLightbox').classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function tutupGambar(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('imageLightbox').classList.add('hidden');
+            document.getElementById('imageLightbox').classList.remove('flex');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') tutupGambar();
+        });
 
         renderProducts();
     </script>
