@@ -51,6 +51,28 @@
             #hero a { padding: .75rem 1rem; font-size: .75rem; border-radius: .75rem; }
             .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: block; }
             #product-container { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: .25rem !important; }
+            #categories { padding-top: 1rem; padding-bottom: .5rem; }
+            #categories > div:first-child { margin-bottom: .65rem; }
+            #categories h2 { font-size: 1.05rem; }
+            #categories p { font-size: 8px; }
+            #categories > div:last-child { gap: .35rem; padding-bottom: 0; }
+            #categories > div:last-child a { min-width: 54px; padding: .35rem; }
+            #categories > div:last-child a div { width: 30px; height: 30px; margin-bottom: .25rem; }
+            #categories > div:last-child a i { font-size: .85rem; }
+            #categories > div:last-child a span { font-size: 8px; }
+            #featured-products { padding-top: .25rem; }
+            #featured-products > div:first-child { margin-bottom: .55rem; }
+            #featured-products > div:first-child h2 { font-size: 1rem; }
+            #featured-products > div:first-child a { font-size: 9px; }
+            #product-container > div { min-width: 0; }
+            #product-container .product-image-wrap { height: 76px; }
+            #product-container .product-info { height: 76px; padding: 5px; }
+            #product-container .product-info > span { font-size: 6px; }
+            #product-container .product-info h3 { height: 24px; font-size: 9px; line-height: 1.25; }
+            #product-container .product-info p { height: 12px; font-size: 7px; }
+            #product-container .product-info .product-price { min-height: 14px; font-size: 9px; line-height: 1.2; }
+            #product-container .product-cart-wrap { padding: 0 5px 5px; }
+            #product-container .product-cart-button { min-height: 27px; padding: 4px 2px; font-size: 7px; line-height: 1.15; }
         }
     </style>
 </head>
@@ -338,24 +360,24 @@
                 card.className = "bg-white rounded-xl sm:rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all group flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
-                        <div class="relative h-28 sm:h-64 overflow-hidden bg-gray-50">
+                        <div class="product-image-wrap relative h-28 sm:h-64 overflow-hidden bg-gray-50">
                             <a href="${item.gambar}" target="_blank" rel="noopener" class="product-image-button w-full h-full block" data-lightbox-src="${item.gambar}" data-lightbox-name="${item.nama.replace(/"/g, '&quot;')}" aria-label="Buka gambar ${item.nama}">
                                 <img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             </a>
                             <div class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-red-500 text-white text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-md">15% OFF</div>
                             <div class="absolute top-2 right-2 sm:top-4 sm:right-4 bg-white/90 backdrop-blur text-emerald-700 text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md shadow-sm">Stok: ${item.stok}</div>
                         </div>
-                        <div class="p-2 sm:p-6 space-y-1 sm:space-y-2">
+                        <div class="product-info p-2 sm:p-6 space-y-1 sm:space-y-2">
                             <span class="text-[8px] sm:text-xs text-gray-400 uppercase font-medium">Official Store</span>
                             <h3 class="font-bold text-gray-900 text-[11px] sm:text-base line-clamp-2 group-hover:text-emerald-600 transition-colors">${item.nama}</h3>
                             <p class="text-[9px] sm:text-xs text-gray-500 line-clamp-2">${item.deskripsi || '-'}</p>
                             <div class="pt-2 flex items-center justify-between">
-                                <span class="text-xs sm:text-lg font-bold text-emerald-600">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</span>
+                                <span class="product-price text-xs sm:text-lg font-bold text-emerald-600">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-2 sm:p-6 pt-0">
-                        <button type="button" data-add-cart="${item.id}" class="w-full bg-emerald-600 text-white py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold flex items-center justify-center gap-1 sm:gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 text-[9px] sm:text-base">
+                    <div class="product-cart-wrap p-2 sm:p-6 pt-0">
+                        <button type="button" data-add-cart="${item.id}" class="product-cart-button w-full bg-emerald-600 text-white py-2 sm:py-3 rounded-lg sm:rounded-xl font-bold flex items-center justify-center gap-1 sm:gap-2 hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/20 text-[9px] sm:text-base">
                             <i class="fa-brands fa-whatsapp text-xs sm:text-lg"></i>
                             Tambah ke Keranjang
                         </button>
