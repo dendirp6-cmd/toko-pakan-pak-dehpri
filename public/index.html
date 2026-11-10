@@ -30,6 +30,7 @@
         .mobile-shell { padding-bottom: 5.5rem; }
         .soft-card { border: 1px solid #ecfdf5; box-shadow: 0 12px 30px rgba(6, 78, 59, 0.06); }
         .secret-admin-dialog { background: rgba(2, 6, 23, .62); }
+        .service-dialog { background: rgba(2, 6, 23, .62); }
         .mobile-app-header, .mobile-story-row, .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: none; }
         @media (min-width: 768px) {
             .mobile-shell { padding-bottom: 0; }
@@ -262,6 +263,17 @@
         </form>
     </div>
 
+    <div id="serviceDialog" class="service-dialog fixed inset-0 z-[105] hidden items-center justify-center p-5" role="dialog" aria-modal="true" aria-labelledby="serviceDialogTitle">
+        <div class="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex items-center gap-3"><div id="serviceDialogIcon" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600"><i class="fa-solid fa-circle-info"></i></div><h2 id="serviceDialogTitle" class="text-lg font-extrabold text-gray-900"></h2></div>
+                <button id="serviceDialogClose" type="button" aria-label="Tutup" class="text-xl leading-none text-gray-400">&times;</button>
+            </div>
+            <div id="serviceDialogBody" class="mt-5 text-sm leading-6 text-gray-600"></div>
+            <button id="serviceDialogAction" type="button" class="mt-5 w-full rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white">Buka Katalog</button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer id="footer" class="bg-emerald-950 text-emerald-100 py-12 md:pb-12 pb-32">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -278,9 +290,9 @@
                 <div>
                     <h4 class="font-bold text-white mb-6">Layanan</h4>
                     <ul class="space-y-4 text-emerald-200/60 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Cara Pemesanan</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Pengiriman</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Katalog Produk</a></li>
+                        <li><button type="button" data-service="order" class="text-left hover:text-white transition-colors">Cara Pemesanan</button></li>
+                        <li><button type="button" data-service="delivery" class="text-left hover:text-white transition-colors">Pengiriman</button></li>
+                        <li><button type="button" data-service="catalog" class="text-left hover:text-white transition-colors">Katalog Produk</button></li>
                     </ul>
                 </div>
                 <div>
@@ -459,9 +471,54 @@
             document.getElementById('checkout-form').classList.remove('hidden');
         }
 
+        const serviceContent = {
+            order: {
+                title: 'Cara Pemesanan',
+                icon: 'fa-list-check',
+                body: '<ol class="list-decimal space-y-2 pl-5"><li>Pilih pakan melalui <strong>Katalog</strong>.</li><li>Tekan <strong>Tambah ke Keranjang</strong> pada produk yang diinginkan.</li><li>Buka <strong>Keranjang</strong>, isi nama, nomor WhatsApp, dan alamat.</li><li>Tekan <strong>Buat Pesanan</strong>, lalu lanjutkan konfirmasi melalui WhatsApp.</li></ol>',
+                action: 'Buka Katalog',
+                screen: 'catalog'
+            },
+            delivery: {
+                title: 'Pengiriman',
+                icon: 'fa-truck-fast',
+                body: '<p>Pesanan diproses setelah data pembeli dikirim. Tim Pak Dehpri akan menghubungi Anda melalui WhatsApp untuk memastikan stok, ongkos kirim, jadwal, dan alamat pengantaran.</p><p class="mt-3">Pastikan nomor WhatsApp dan alamat yang diisi aktif agar pesanan cepat dikonfirmasi.</p>',
+                action: 'Lihat Keranjang',
+                screen: 'cart'
+            },
+            catalog: {
+                title: 'Katalog Produk',
+                icon: 'fa-layer-group',
+                body: '<p>Lihat daftar pakan yang tersedia, bandingkan harga dan stok, lalu tambahkan produk pilihan ke keranjang untuk dipesan.</p>',
+                action: 'Buka Katalog',
+                screen: 'catalog'
+            }
+        };
+
+        function bukaLayanan(service) {
+            const content = serviceContent[service];
+            if (!content) return;
+            document.getElementById('serviceDialogTitle').textContent = content.title;
+            document.getElementById('serviceDialogIcon').innerHTML = `<i class="fa-solid ${content.icon}"></i>`;
+            document.getElementById('serviceDialogBody').innerHTML = content.body;
+            document.getElementById('serviceDialogAction').textContent = content.action;
+            document.getElementById('serviceDialogAction').dataset.screen = content.screen;
+            document.getElementById('serviceDialog').classList.remove('hidden');
+            document.getElementById('serviceDialog').classList.add('flex');
+        }
+
+        function tutupLayanan() {
+            document.getElementById('serviceDialog').classList.add('hidden');
+            document.getElementById('serviceDialog').classList.remove('flex');
+        }
+
         document.addEventListener('click', event => {
+            const serviceButton = event.target.closest('[data-service]');
+            if (serviceButton) bukaLayanan(serviceButton.dataset.service);
+            if (event.target.closest('#serviceDialogClose')) tutupLayanan();
+            if (event.target.id === 'serviceDialog') tutupLayanan();
             const screenButton = event.target.closest('[data-screen]');
-            if (screenButton) showScreen(screenButton.dataset.screen);
+            if (screenButton) { showScreen(screenButton.dataset.screen); if (screenButton.id === 'serviceDialogAction') tutupLayanan(); }
             const addButton = event.target.closest('[data-add-cart]');
             if (addButton) tambahKeKeranjang(addButton.dataset.addCart);
             const plus = event.target.closest('[data-cart-plus]');
