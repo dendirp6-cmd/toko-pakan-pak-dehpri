@@ -23,10 +23,11 @@
             main { padding: 22px 16px 32px; }
             main > div:first-child h1 { font-size: 22px; }
             main > div:first-child p { line-height: 1.5; }
-            .admin-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-            .admin-stats > div { padding: 16px; min-height: 104px; }
-            .admin-stats h3 { font-size: 26px; }
-            .admin-stats .w-12 { width: 38px; height: 38px; font-size: 16px; }
+            .admin-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+            .admin-stats > div { padding: 12px 8px; min-height: 104px; display: block; }
+            .admin-stats > div p { font-size: 9px; line-height: 1.25; }
+            .admin-stats h3 { font-size: 22px; margin-top: 8px; }
+            .admin-stats .w-12 { width: 32px; height: 32px; font-size: 14px; margin-left: auto; }
             .admin-product-layout { gap: 16px; }
             .admin-product-layout > div { padding: 18px; border-radius: 24px; }
             .admin-product-layout form { gap: 14px; }
@@ -142,10 +143,6 @@
                 <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-wheat-awn"></i>
                 </div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
-                <div><p class="text-xs font-semibold text-gray-400">Omzet Bulan Ini</p><h3 id="dashboard-revenue" class="text-xl font-extrabold text-gray-900 mt-2">Rp 0</h3><p class="text-[10px] text-emerald-600 mt-1">Dari pesanan selesai</p></div>
-                <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl"><i class="fa-solid fa-wallet"></i></div>
             </div>
         </div>
         <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4"><div class="flex items-start gap-3"><div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white"><i class="fa-solid fa-bell"></i></div><div class="min-w-0"><div class="flex items-center justify-between gap-2"><h2 class="text-xs font-extrabold text-amber-900">Perhatian: Stok Pakan Rendah</h2><span id="low-stock-count" class="rounded-md bg-amber-200 px-2 py-1 text-[9px] font-extrabold text-amber-900">0 Item</span></div><p id="low-stock-items" class="mt-1 text-[10px] leading-4 text-amber-800">Stok produk masih aman.</p><a href="#produk" data-admin-view="produk" class="mt-2 inline-block text-[10px] font-extrabold text-emerald-700">Perbarui Stok Sekarang <i class="fa-solid fa-chevron-right ml-1"></i></a></div></div></div>
@@ -415,7 +412,6 @@
                 document.getElementById('stat-orders').textContent = orders.length;
                 document.getElementById('stat-revenue').textContent = formatRupiah(revenue);
                 document.getElementById('stat-profit').textContent = formatRupiah(profit);
-                document.getElementById('dashboard-revenue').textContent = formatRupiah(revenue);
                 document.getElementById('stat-cancelled').textContent = cancelled.length;
                 document.getElementById('quick-order-count').textContent = orders.filter(order => order.status === 'pending').length;
                 updateActivityBadges();
