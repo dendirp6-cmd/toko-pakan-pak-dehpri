@@ -56,6 +56,11 @@
             .admin-orders-table tbody td:nth-child(5) { grid-column: 2; text-align: right; }
             .admin-orders-table select { max-width: 118px; font-size: 10px; }
         }
+        .admin-sidebar-link { display: flex; align-items: center; gap: 12px; border-radius: 14px; padding: 12px 14px; color: #64748b; font-size: 13px; font-weight: 700; transition: .2s; }
+        .admin-sidebar-link:hover, .admin-sidebar-link.active { background: #ecfdf5; color: #059669; }
+        .admin-badge { min-width: 20px; height: 20px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; background: #ef4444; color: white; font-size: 10px; font-weight: 800; margin-left: auto; }
+        @media (min-width: 768px) { .admin-main { padding-left: 248px; } .admin-sidebar { display: block !important; } }
+        @media (max-width: 767px) { .admin-sidebar.open { display: block; } .admin-sidebar.open + .admin-sidebar-overlay { display: block; } }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 pb-20">
@@ -64,6 +69,7 @@
     <nav class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
+                <button id="sidebarToggle" type="button" class="md:hidden w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
                 <div class="bg-emerald-600 p-2 rounded-xl text-white">
                     <i class="fa-solid fa-leaf text-lg"></i>
                 </div>
@@ -75,8 +81,21 @@
         </div>
     </nav>
 
+    <aside id="adminSidebar" class="admin-sidebar hidden fixed left-0 top-16 bottom-0 z-40 w-60 border-r border-gray-100 bg-white p-4 shadow-sm">
+        <p class="px-3 mb-3 text-[10px] font-extrabold uppercase tracking-widest text-gray-400">Menu Admin</p>
+        <nav class="space-y-1">
+            <a class="admin-sidebar-link active" href="#dashboard"><i class="fa-solid fa-chart-pie w-4 text-center"></i><span>Dashboard</span></a>
+            <a class="admin-sidebar-link" href="#produk"><i class="fa-solid fa-boxes-stacked w-4 text-center"></i><span>Produk</span><span id="badge-produk" class="admin-badge hidden">0</span></a>
+            <a class="admin-sidebar-link" href="#pesanan"><i class="fa-solid fa-receipt w-4 text-center"></i><span>Pesanan</span><span id="badge-pesanan" class="admin-badge hidden">0</span></a>
+            <a class="admin-sidebar-link" href="#laporan"><i class="fa-solid fa-chart-line w-4 text-center"></i><span>Laporan</span><span id="badge-laporan" class="admin-badge hidden">0</span></a>
+        </nav>
+        <div class="absolute bottom-5 left-4 right-4 rounded-2xl bg-emerald-50 p-4 text-xs text-emerald-800"><i class="fa-solid fa-circle-info mr-1"></i> Badge merah menandakan aktivitas baru.</div>
+    </aside>
+    <div id="sidebarOverlay" class="admin-sidebar-overlay hidden fixed inset-0 z-30 bg-slate-950/30 md:hidden"></div>
+
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+    <main class="admin-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+        <section id="dashboard" class="space-y-6">
         
         <div>
             <h1 class="text-2xl font-extrabold text-gray-900">Panel Admin Toko</h1>
@@ -115,9 +134,10 @@
                 </div>
             </div>
         </div>
+        </section>
 
         <!-- Form & Table Grid -->
-        <div class="admin-product-layout grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <section id="produk" class="admin-product-layout grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             <!-- Form Tambah Produk -->
             <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
@@ -181,14 +201,14 @@
                 </div>
             </div>
 
-        </div>
+        </section>
 
         <!-- Laporan Order dan Keuangan -->
-        <section class="space-y-5">
+        <section id="laporan" class="space-y-5">
             <div class="flex items-center justify-between"><div><h2 class="text-xl font-extrabold text-gray-900">Laporan Penjualan</h2><p class="text-xs text-gray-500 mt-1">Data order tersimpan dari checkout pembeli.</p></div><button type="button" onclick="loadOrders()" class="rounded-xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button></div>
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-3"><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Total Order</p><strong id="stat-orders" class="text-2xl block mt-1">0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Omzet Selesai</p><strong id="stat-revenue" class="text-lg block mt-1 text-emerald-600">Rp 0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Profit Kotor</p><strong id="stat-profit" class="text-lg block mt-1 text-blue-600">Rp 0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Dibatalkan</p><strong id="stat-cancelled" class="text-2xl block mt-1 text-red-500">0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Trafik Tercatat</p><strong id="stat-traffic" class="text-2xl block mt-1 text-amber-500">-</strong></div></div>
             <div id="orders-message" class="hidden rounded-xl bg-amber-50 border border-amber-100 p-4 text-xs text-amber-800"></div>
-            <div class="admin-orders-table overflow-x-auto rounded-2xl border border-gray-100 bg-white"><table class="w-full text-xs text-left"><thead class="bg-gray-50 text-gray-500 uppercase font-bold"><tr><th class="p-3">Order</th><th class="p-3">Pembeli</th><th class="p-3">Total</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead><tbody id="orders-body" class="divide-y divide-gray-100"><tr><td colspan="5" class="p-6 text-center text-gray-400">Memuat data order...</td></tr></tbody></table></div>
+            <div id="pesanan" class="scroll-mt-24"></div><div class="admin-orders-table overflow-x-auto rounded-2xl border border-gray-100 bg-white"><table class="w-full text-xs text-left"><thead class="bg-gray-50 text-gray-500 uppercase font-bold"><tr><th class="p-3">Order</th><th class="p-3">Pembeli</th><th class="p-3">Total</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead><tbody id="orders-body" class="divide-y divide-gray-100"><tr><td colspan="5" class="p-6 text-center text-gray-400">Memuat data order...</td></tr></tbody></table></div>
         </section>
 
     </main>
@@ -256,6 +276,9 @@
             document.getElementById('stat-total-produk').innerText = data.length;
             const totalStok = data.reduce((acc, curr) => acc + (Number(curr.stok) || 0), 0);
             document.getElementById('stat-total-stok').innerText = totalStok;
+            const newProductCount = Number(localStorage.getItem('pdh_new_products') || 0);
+            document.getElementById('badge-produk').textContent = newProductCount;
+            document.getElementById('badge-produk').classList.toggle('hidden', newProductCount === 0);
 
             if (data.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-400 font-medium">Belum ada produk tersimpan.</td></tr>`;
@@ -315,6 +338,16 @@
 
         const formatRupiah = value => `Rp ${(Number(value) || 0).toLocaleString('id-ID')}`;
         let orders = [];
+        function updateActivityBadges() {
+            const pendingCount = orders.filter(order => order.status === 'pending').length;
+            const cancelledCount = orders.filter(order => order.status === 'cancelled').length;
+            const pendingBadge = document.getElementById('badge-pesanan');
+            const reportBadge = document.getElementById('badge-laporan');
+            pendingBadge.textContent = pendingCount;
+            pendingBadge.classList.toggle('hidden', pendingCount === 0);
+            reportBadge.textContent = cancelledCount;
+            reportBadge.classList.toggle('hidden', cancelledCount === 0);
+        }
         let adminPassword = sessionStorage.getItem('pdh_admin_password') || '';
         const adminLogin = document.getElementById('adminLogin');
         const adminLoginError = document.getElementById('admin-login-error');
@@ -357,8 +390,9 @@
                 document.getElementById('stat-revenue').textContent = formatRupiah(revenue);
                 document.getElementById('stat-profit').textContent = formatRupiah(profit);
                 document.getElementById('stat-cancelled').textContent = cancelled.length;
+                updateActivityBadges();
                 document.getElementById('orders-message').classList.add('hidden');
-                document.getElementById('orders-body').innerHTML = orders.length ? orders.map(order => `<tr><td class="p-3 font-bold">${order.order_number}<div class="text-[10px] text-gray-400">${new Date(order.created_at).toLocaleString('id-ID')}</div></td><td class="p-3">${order.customer_name}<div class="text-[10px] text-gray-400">${order.customer_phone}</div></td><td class="p-3 font-bold text-emerald-600">${formatRupiah(order.total)}</td><td class="p-3"><span class="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-bold">${order.status}</span></td><td class="p-3"><select onchange="ubahStatus('${order.id}', this.value)" class="rounded-lg border border-gray-200 p-1 text-[10px]"><option value="">Ubah status</option><option value="confirmed">confirmed</option><option value="processing">processing</option><option value="shipped">shipped</option><option value="completed">completed</option><option value="cancelled">cancelled</option></select></td></tr>`).join('') : '<tr><td colspan="5" class="p-6 text-center text-gray-400">Belum ada order.</td></tr>';
+                document.getElementById('orders-body').innerHTML = orders.length ? orders.map(order => `<tr><td class="p-3 font-bold">${order.order_number}<div class="text-[10px] text-gray-400">${new Date(order.created_at).toLocaleString('id-ID')}</div><details class="mt-2 font-normal"><summary class="cursor-pointer text-emerald-700 text-[10px] font-bold">Lihat detail pesanan</summary><div class="mt-2 rounded-xl bg-gray-50 p-2 space-y-1">${(order.order_items || []).map(item => `<div class="flex justify-between gap-3"><span>${item.product_name} × ${item.quantity}</span><b>${formatRupiah(item.line_total)}</b></div>`).join('') || '<span>Detail produk tidak tersedia</span>'}</div></details></td><td class="p-3">${order.customer_name}<div class="text-[10px] text-gray-400">${order.customer_phone}</div><div class="text-[10px] text-gray-400">${order.customer_address || '-'}</div></td><td class="p-3 font-bold text-emerald-600">${formatRupiah(order.total)}</td><td class="p-3"><span class="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-bold">${order.status}</span></td><td class="p-3"><select onchange="ubahStatus('${order.id}', this.value)" class="rounded-lg border border-gray-200 p-1 text-[10px]"><option value="">Ubah status</option><option value="confirmed">confirmed</option><option value="processing">processing</option><option value="shipped">shipped</option><option value="completed">completed</option><option value="cancelled">cancelled</option></select></td></tr>`).join('') : '<tr><td colspan="5" class="p-6 text-center text-gray-400">Belum ada order.</td></tr>';
             } catch (error) {
                 message.textContent = `Laporan belum aktif: ${error.message} Pastikan SUPABASE_SERVICE_ROLE_KEY dan ADMIN_PASSWORD sudah diisi di environment server/Vercel.`;
                 message.classList.remove('hidden');
@@ -406,6 +440,7 @@
             const data = getStoredData();
             data.push(newProduct);
             localStorage.setItem('dataPakanStore', JSON.stringify(data));
+            localStorage.setItem('pdh_new_products', String(Number(localStorage.getItem('pdh_new_products') || 0) + 1));
 
             document.getElementById('form-tambah').reset();
             renderAdmin();
@@ -413,6 +448,18 @@
 
         renderAdmin();
         loadOrders();
+
+        document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('adminSidebar').classList.toggle('open'));
+        document.getElementById('sidebarOverlay').addEventListener('click', () => document.getElementById('adminSidebar').classList.remove('open'));
+        document.querySelectorAll('.admin-sidebar-link').forEach(link => link.addEventListener('click', () => {
+            document.querySelectorAll('.admin-sidebar-link').forEach(item => item.classList.remove('active'));
+            link.classList.add('active');
+            document.getElementById('adminSidebar').classList.remove('open');
+            if (link.getAttribute('href') === '#produk') {
+                localStorage.setItem('pdh_new_products', '0');
+                document.getElementById('badge-produk').classList.add('hidden');
+            }
+        }));
     </script>
 </body>
 </html>
