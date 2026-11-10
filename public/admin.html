@@ -66,6 +66,9 @@
         .admin-bottom-link i { font-size: 20px; }
         .admin-bottom-link.active { color: #059669; }
         .admin-bottom-link .admin-badge { position: absolute; margin: -24px 0 0 22px; min-width: 17px; height: 17px; padding: 0 4px; font-size: 9px; }
+        .admin-view-hidden { display: none !important; }
+        .admin-welcome { background: linear-gradient(135deg, #047857, #10b981); color: white; border-radius: 24px; padding: 20px; box-shadow: 0 14px 28px rgba(5,150,105,.16); }
+        .admin-quick-action { display: flex; align-items: center; gap: 10px; border: 1px solid #ecfdf5; border-radius: 16px; padding: 13px; color: #047857; font-size: 12px; font-weight: 800; background: white; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 pb-20">
@@ -145,10 +148,12 @@
                 </div>
             </div>
         </div>
+        <div class="admin-welcome"><p class="text-xs font-bold text-emerald-100">Ringkasan Toko</p><h2 class="mt-1 text-xl font-extrabold">Selamat datang, Pak Dehpri</h2><p class="mt-1 text-xs text-emerald-50">Pilih menu di bawah untuk mengelola toko dengan cepat.</p></div>
+        <div class="grid grid-cols-2 gap-3"><a href="#produk" data-admin-view="produk" class="admin-quick-action"><i class="fa-solid fa-plus-circle text-lg"></i><span>Tambah produk</span></a><a href="#pesanan" data-admin-view="pesanan" class="admin-quick-action"><i class="fa-solid fa-receipt text-lg"></i><span>Cek pesanan</span></a></div>
         </section>
 
         <!-- Form & Table Grid -->
-        <section id="produk" class="admin-product-layout grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <section id="produk" class="admin-product-layout grid grid-cols-1 lg:grid-cols-12 gap-8 items-start admin-view-hidden">
             
             <!-- Form Tambah Produk -->
             <div class="lg:col-span-5 bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
@@ -215,8 +220,8 @@
         </section>
 
         <!-- Laporan Order dan Keuangan -->
-        <section id="laporan" class="space-y-5">
-            <div class="flex items-center justify-between"><div><h2 class="text-xl font-extrabold text-gray-900">Laporan Penjualan</h2><p class="text-xs text-gray-500 mt-1">Data order tersimpan dari checkout pembeli.</p></div><button type="button" onclick="loadOrders()" class="rounded-xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button></div>
+        <section id="laporan" class="space-y-5 admin-view-hidden">
+            <div class="flex items-center justify-between"><div><h2 id="report-title" class="text-xl font-extrabold text-gray-900">Laporan Penjualan</h2><p id="report-description" class="text-xs text-gray-500 mt-1">Ringkasan omzet, profit, dan aktivitas toko.</p></div><button type="button" onclick="loadOrders()" class="rounded-xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button></div>
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-3"><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Total Order</p><strong id="stat-orders" class="text-2xl block mt-1">0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Omzet Selesai</p><strong id="stat-revenue" class="text-lg block mt-1 text-emerald-600">Rp 0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Profit Kotor</p><strong id="stat-profit" class="text-lg block mt-1 text-blue-600">Rp 0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Dibatalkan</p><strong id="stat-cancelled" class="text-2xl block mt-1 text-red-500">0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Trafik Tercatat</p><strong id="stat-traffic" class="text-2xl block mt-1 text-amber-500">-</strong></div></div>
             <div id="orders-message" class="hidden rounded-xl bg-amber-50 border border-amber-100 p-4 text-xs text-amber-800"></div>
             <div id="pesanan" class="scroll-mt-24"></div><div class="admin-orders-table overflow-x-auto rounded-2xl border border-gray-100 bg-white"><table class="w-full text-xs text-left"><thead class="bg-gray-50 text-gray-500 uppercase font-bold"><tr><th class="p-3">Order</th><th class="p-3">Pembeli</th><th class="p-3">Total</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead><tbody id="orders-body" class="divide-y divide-gray-100"><tr><td colspan="5" class="p-6 text-center text-gray-400">Memuat data order...</td></tr></tbody></table></div>
@@ -484,6 +489,21 @@
                 localStorage.setItem('pdh_new_products', '0');
                 document.getElementById('bottom-badge-produk').classList.add('hidden');
             }
+            showAdminView(link.getAttribute('href').replace('#', ''));
+        }));
+
+        function showAdminView(view) {
+            const target = view === 'pesanan' || view === 'laporan' ? 'laporan' : view;
+            ['dashboard', 'produk', 'laporan'].forEach(id => document.getElementById(id).classList.toggle('admin-view-hidden', id !== target));
+            document.querySelectorAll('.admin-bottom-link').forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${view}`));
+            document.getElementById('report-title').textContent = view === 'pesanan' ? 'Pesanan Masuk' : 'Laporan Penjualan';
+            document.getElementById('report-description').textContent = view === 'pesanan' ? 'Periksa detail pesanan dan ubah status pengiriman.' : 'Ringkasan omzet, profit, dan aktivitas toko.';
+            if (view === 'pesanan') document.getElementById('pesanan').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        document.querySelectorAll('[data-admin-view]').forEach(link => link.addEventListener('click', event => {
+            event.preventDefault();
+            showAdminView(link.dataset.adminView);
         }));
     </script>
 </body>
