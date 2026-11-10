@@ -29,6 +29,7 @@
         .screen-nav i { transition: transform 180ms ease; }
         .mobile-shell { padding-bottom: 5.5rem; }
         .soft-card { border: 1px solid #ecfdf5; box-shadow: 0 12px 30px rgba(6, 78, 59, 0.06); }
+        .secret-admin-dialog { background: rgba(2, 6, 23, .62); }
         .mobile-app-header, .mobile-story-row, .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: none; }
         @media (min-width: 768px) {
             .mobile-shell { padding-bottom: 0; }
@@ -83,18 +84,11 @@
                         <i class="fa-solid fa-music"></i>
                         <span>Putar Musik</span>
                     </button>
-                    <a href="/admin.html" class="hidden lg:flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-xs hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20">
-                        <i class="fa-solid fa-user-shield text-emerald-400"></i>
-                        <span>Panel Admin</span>
-                    </a>
                     <div class="h-8 w-[1px] bg-gray-100 mx-2 hidden lg:block"></div>
                     <button class="p-3 text-gray-500 hover:text-emerald-600 transition-colors relative group">
                         <i class="fa-solid fa-cart-shopping text-xl"></i>
                         <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
                     </button>
-                    <a href="/admin.html" class="md:hidden p-3 text-gray-500 hover:text-emerald-600">
-                        <i class="fa-solid fa-user-shield text-xl"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -102,7 +96,7 @@
 
     <main id="home-screen" class="app-screen active mobile-shell">
     <header class="mobile-app-header">
-        <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-emerald-400/20 flex items-center justify-center"><i class="fa-solid fa-leaf text-emerald-200"></i></div><div><div class="font-extrabold leading-none">Pak Dehpri <span class="text-[9px] text-emerald-300">OFFICIAL</span></div><div class="text-[10px] text-emerald-200 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>Bekasi, Jawa Barat</div></div></div>
+        <div class="flex items-center gap-3"><button type="button" data-admin-secret aria-label="Logo Pak Dehpri" class="w-10 h-10 rounded-xl bg-emerald-400/20 flex items-center justify-center"><i class="fa-solid fa-leaf text-emerald-200"></i></button><div><div class="font-extrabold leading-none">Pak Dehpri <span class="text-[9px] text-emerald-300">OFFICIAL</span></div><div class="text-[10px] text-emerald-200 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>Bekasi, Jawa Barat</div></div></div>
         <div class="flex items-center gap-4"><i class="fa-regular fa-bell text-emerald-100"></i><button type="button" data-screen="cart" class="relative"><i class="fa-solid fa-bag-shopping text-emerald-100"></i><span id="header-cart-badge" class="absolute -right-2 -top-2 rounded-full bg-amber-400 text-[9px] px-1.5 text-emerald-950">0</span></button></div>
     </header>
     <div class="mobile-story-row">
@@ -268,6 +262,15 @@
             <img id="lightboxImage" src="" alt="" class="max-w-full max-h-[78vh] object-contain rounded-2xl shadow-2xl">
             <p id="lightboxCaption" class="text-white font-semibold text-center"></p>
         </div>
+    </div>
+
+    <div id="secretAdminLogin" class="secret-admin-dialog fixed inset-0 z-[110] hidden items-center justify-center p-5" role="dialog" aria-modal="true" aria-labelledby="secretAdminTitle">
+        <form id="secretAdminForm" class="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl space-y-4">
+            <div class="text-center"><div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600"><i class="fa-solid fa-lock"></i></div><h2 id="secretAdminTitle" class="text-lg font-extrabold text-gray-900">Akses Pengelola</h2><p class="mt-1 text-xs text-gray-500">Masukkan password untuk melanjutkan.</p></div>
+            <input id="secret-admin-password" type="password" required autocomplete="current-password" placeholder="Password admin" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-emerald-500 focus:bg-white">
+            <p id="secret-admin-error" class="hidden rounded-xl bg-red-50 p-3 text-xs text-red-600"></p>
+            <div class="grid grid-cols-2 gap-2"><button id="secret-admin-cancel" type="button" class="rounded-xl border border-gray-200 py-3 text-sm font-bold text-gray-600">Batal</button><button type="submit" class="rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white">Masuk</button></div>
+        </form>
     </div>
 
     <!-- Footer -->
@@ -537,6 +540,39 @@
             document.getElementById('imageLightbox').classList.remove('flex');
             document.body.classList.remove('overflow-hidden');
         }
+
+        let adminSecretTaps = 0;
+        let adminSecretTimer;
+        const secretAdminLogin = document.getElementById('secretAdminLogin');
+        const secretAdminError = document.getElementById('secret-admin-error');
+        document.querySelector('[data-admin-secret]').addEventListener('click', () => {
+            adminSecretTaps += 1;
+            clearTimeout(adminSecretTimer);
+            adminSecretTimer = setTimeout(() => { adminSecretTaps = 0; }, 1400);
+            if (adminSecretTaps >= 5) {
+                adminSecretTaps = 0;
+                secretAdminLogin.classList.remove('hidden');
+                secretAdminLogin.classList.add('flex');
+                document.getElementById('secret-admin-password').focus();
+            }
+        });
+        document.getElementById('secret-admin-cancel').addEventListener('click', () => {
+            secretAdminLogin.classList.add('hidden');
+            secretAdminLogin.classList.remove('flex');
+            secretAdminError.classList.add('hidden');
+        });
+        document.getElementById('secretAdminForm').addEventListener('submit', async event => {
+            event.preventDefault();
+            const password = document.getElementById('secret-admin-password').value;
+            const response = await fetch('/api/orders', { headers: { 'x-admin-password': password } });
+            if (!response.ok) {
+                secretAdminError.textContent = 'Password admin tidak cocok.';
+                secretAdminError.classList.remove('hidden');
+                return;
+            }
+            sessionStorage.setItem('pdh_admin_password', password);
+            window.location.href = '/admin.html';
+        });
 
         // Delegated click bekerja lebih konsisten pada tap Android dan iPhone.
         document.addEventListener('click', event => {
