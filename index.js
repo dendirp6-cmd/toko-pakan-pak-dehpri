@@ -21,7 +21,9 @@ app.get('/api/pakan', (req, res) => {
 
 // 4. Fallback Route untuk melayani index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  // Pastikan fallback memakai halaman terbaru di public, bukan halaman lama
+  // di root proyek yang masih menggunakan grid 2 kolom pada layar kecil.
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Export untuk Serverless Vercel
