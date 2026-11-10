@@ -30,11 +30,6 @@
         .mobile-shell { padding-bottom: 5.5rem; }
         .soft-card { border: 1px solid #ecfdf5; box-shadow: 0 12px 30px rgba(6, 78, 59, 0.06); }
         .secret-admin-dialog { background: rgba(2, 6, 23, .62); }
-        .dummy-video-stage { background: linear-gradient(135deg, rgba(6,78,59,.92), rgba(5,150,105,.68)), url('https://storage.googleapis.com/uxpilot-auth.appspot.com/gen_ef4209b31b_a40a440d85e0c66e.png') center/cover; }
-        .dummy-video-playing .dummy-video-orb { animation: videoFloat 2.2s ease-in-out infinite; }
-        .dummy-video-playing .dummy-video-wave { animation: videoWave 1.5s linear infinite; }
-        @keyframes videoFloat { 50% { transform: translateY(-10px) scale(1.04); } }
-        @keyframes videoWave { from { transform: translateX(-20%); } to { transform: translateX(20%); } }
         .mobile-app-header, .mobile-story-row, .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: none; }
         @media (min-width: 768px) {
             .mobile-shell { padding-bottom: 0; }
@@ -135,14 +130,6 @@
             </div>
         </div>
     </section>
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
-        <div id="dummy-video" class="dummy-video-stage relative overflow-hidden rounded-3xl p-5 text-white shadow-xl shadow-emerald-900/10">
-            <div class="relative z-10 flex items-start justify-between gap-4"><div><p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-emerald-100">Video Demo</p><h2 class="mt-1 text-lg font-extrabold">Pakan berkualitas untuk ternak sehat</h2><p class="mt-1 text-[10px] text-emerald-50/80">Lihat suasana toko dan pilihan pakan Pak Dehpri.</p></div><span class="rounded-full bg-white/15 px-2 py-1 text-[9px] font-bold">00:20</span></div>
-            <div class="relative z-10 flex h-28 items-center justify-center"><div class="dummy-video-orb flex h-16 w-16 items-center justify-center rounded-full border-4 border-white/70 bg-emerald-500/80 shadow-2xl"><i class="fa-solid fa-wheat-awn text-2xl text-amber-200"></i></div><div class="dummy-video-wave absolute bottom-2 h-8 w-3/4 rounded-[50%] border-t-2 border-white/30"></div></div>
-            <div class="relative z-10 flex items-center gap-3"><button id="dummy-video-toggle" type="button" class="flex h-9 w-9 items-center justify-center rounded-full bg-white text-emerald-800" aria-label="Putar video demo"><i class="fa-solid fa-play"></i></button><div class="h-1.5 flex-1 overflow-hidden rounded-full bg-white/25"><div id="dummy-video-progress" class="h-full w-0 rounded-full bg-amber-300 transition-all"></div></div><span id="dummy-video-time" class="text-[10px] font-bold text-emerald-50">00:00</span></div>
-        </div>
-    </section>
-
     </main>
 
     <!-- Katalog Screen -->
@@ -586,21 +573,6 @@
             window.location.href = '/admin.html';
         });
 
-        let dummyVideoTimer;
-        let dummyVideoSeconds = 0;
-        document.getElementById('dummy-video-toggle').addEventListener('click', event => {
-            const video = document.getElementById('dummy-video');
-            const icon = event.currentTarget.querySelector('i');
-            const playing = video.classList.toggle('dummy-video-playing');
-            icon.className = playing ? 'fa-solid fa-pause' : 'fa-solid fa-play';
-            event.currentTarget.setAttribute('aria-label', playing ? 'Jeda video demo' : 'Putar video demo');
-            clearInterval(dummyVideoTimer);
-            if (playing) dummyVideoTimer = setInterval(() => {
-                dummyVideoSeconds = dummyVideoSeconds >= 20 ? 0 : dummyVideoSeconds + 1;
-                document.getElementById('dummy-video-progress').style.width = `${dummyVideoSeconds * 5}%`;
-                document.getElementById('dummy-video-time').textContent = `00:${String(dummyVideoSeconds).padStart(2, '0')}`;
-            }, 1000);
-        });
 
         // Delegated click bekerja lebih konsisten pada tap Android dan iPhone.
         document.addEventListener('click', event => {
