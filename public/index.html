@@ -50,6 +50,7 @@
             #hero p { font-size: .75rem; margin-bottom: 1.25rem; }
             #hero a { padding: .75rem 1rem; font-size: .75rem; border-radius: .75rem; }
             .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: block; }
+            #product-container { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: .25rem !important; }
         }
     </style>
 </head>
@@ -154,9 +155,6 @@
     <section class="mobile-flash-sale px-4 pt-4">
         <div class="rounded-2xl bg-emerald-900 p-4 text-white flex items-center justify-between"><div><p class="text-[10px] font-bold tracking-widest text-amber-300">FLASH SALE HARI INI</p><p class="text-[10px] text-emerald-200 mt-1">Berakhir dalam: <strong>03 : 42 : 18</strong></p></div><i class="fa-solid fa-bolt text-amber-300 text-2xl"></i></div>
     </section>
-    <section class="mobile-quick-actions px-4 pt-4">
-        <div class="grid grid-cols-4 gap-2"><button type="button" data-screen="catalog" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-drumstick-bite text-orange-500"></i><span class="block text-[10px] font-bold mt-2">Ayam</span></button><button type="button" data-screen="catalog" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-cow text-emerald-600"></i><span class="block text-[10px] font-bold mt-2">Sapi</span></button><button type="button" data-screen="education" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-calculator text-blue-500"></i><span class="block text-[10px] font-bold mt-2">Kalkulator</span></button><button type="button" data-screen="catalog" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-pills text-purple-500"></i><span class="block text-[10px] font-bold mt-2">Suplemen</span></button></div>
-    </section>
     <!-- Category Grid -->
     <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <div class="flex items-center justify-between mb-5 md:mb-10">
@@ -216,7 +214,7 @@
         </div>
 
         <!-- Target Render LocalStorage -->
-        <div id="product-container" class="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
+        <div id="product-container" class="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6">
             <!-- Card produk akan otomatis di-render oleh Script JS di bawah -->
         </div>
     </section>
