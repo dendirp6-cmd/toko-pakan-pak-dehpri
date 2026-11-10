@@ -29,9 +29,25 @@
         .screen-nav i { transition: transform 180ms ease; }
         .mobile-shell { padding-bottom: 5.5rem; }
         .soft-card { border: 1px solid #ecfdf5; box-shadow: 0 12px 30px rgba(6, 78, 59, 0.06); }
+        .mobile-app-header, .mobile-story-row, .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: none; }
         @media (min-width: 768px) {
             .mobile-shell { padding-bottom: 0; }
             .app-screen.active { display: block; }
+        }
+        @media (max-width: 767px) {
+            body { background: #f7faf9; }
+            .sticky-nav { display: none; }
+            .mobile-app-header { display: flex; align-items: center; justify-content: space-between; background: #064e3b; color: white; padding: 1rem; }
+            .mobile-story-row { display: flex; gap: .75rem; overflow-x: auto; padding: 1rem; background: #064e3b; scrollbar-width: none; }
+            .mobile-story-row::-webkit-scrollbar { display: none; }
+            .mobile-story { min-width: 4.4rem; text-align: center; font-size: .65rem; font-weight: 700; color: #d1fae5; }
+            .mobile-story span { display: flex; width: 3.25rem; height: 3.25rem; align-items: center; justify-content: center; margin: 0 auto .35rem; border: 2px solid #fbbf24; border-radius: 999px; background: #ecfdf5; color: #047857; font-size: 1.25rem; }
+            #hero { padding: 1rem; background: #064e3b; }
+            #hero > div { height: 20rem; border-radius: 1.5rem; }
+            #hero h1 { font-size: 2rem; margin-bottom: 1rem; }
+            #hero p { font-size: .75rem; margin-bottom: 1.25rem; }
+            #hero a { padding: .75rem 1rem; font-size: .75rem; border-radius: .75rem; }
+            .mobile-flash-sale, .mobile-quick-actions, .mobile-review { display: block; }
         }
     </style>
 </head>
@@ -85,6 +101,16 @@
     </nav>
 
     <main id="home-screen" class="app-screen active mobile-shell">
+    <header class="mobile-app-header">
+        <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-emerald-400/20 flex items-center justify-center"><i class="fa-solid fa-leaf text-emerald-200"></i></div><div><div class="font-extrabold leading-none">Pak Dehpri <span class="text-[9px] text-emerald-300">OFFICIAL</span></div><div class="text-[10px] text-emerald-200 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>Bekasi, Jawa Barat</div></div></div>
+        <div class="flex items-center gap-4"><i class="fa-regular fa-bell text-emerald-100"></i><button type="button" data-screen="cart" class="relative"><i class="fa-solid fa-bag-shopping text-emerald-100"></i><span class="absolute -right-2 -top-2 rounded-full bg-amber-400 text-[9px] px-1.5 text-emerald-950">0</span></button></div>
+    </header>
+    <div class="mobile-story-row">
+        <button type="button" class="mobile-story"><span><i class="fa-solid fa-percent"></i></span>Diskon Sak</button>
+        <button type="button" class="mobile-story"><span><i class="fa-solid fa-feather-pointed"></i></span>Tips Broiler</button>
+        <button type="button" class="mobile-story"><span><i class="fa-solid fa-cow"></i></span>Hasil Susu</button>
+        <button type="button" class="mobile-story"><span><i class="fa-solid fa-fish"></i></span>Pakan Lele</button>
+    </div>
     <!-- Hero Section -->
     <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div class="relative h-[320px] sm:h-[450px] rounded-[2.5rem] overflow-hidden emerald-gradient flex items-center shadow-2xl shadow-emerald-900/10">
@@ -93,9 +119,9 @@
                 <div class="absolute inset-0 hero-overlay"></div>
             </div>
             <div class="relative z-10 px-8 sm:px-16 max-w-3xl">
-                <span class="inline-block bg-white/10 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-[0.2em] border border-white/20">Promo Spesial Hari Ini</span>
-                <h1 class="text-3xl sm:text-6xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">Nutrisi Terbaik Untuk Ternak Sehat & Gemuk</h1>
-                <p class="text-emerald-50/80 text-sm sm:text-lg mb-10 max-w-xl">Dapatkan diskon khusus hingga 15% untuk pembelian pakan broiler & bebek hari ini dengan pengiriman gratis.</p>
+                <span class="inline-block bg-white/10 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-[0.2em] border border-white/20">Gratis Ongkir Armada</span>
+                <h1 class="text-3xl sm:text-6xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">Penggemuk Ternak Tercepat & Alami</h1>
+                <p class="text-emerald-50/80 text-sm sm:text-lg mb-10 max-w-xl">Formula asam amino dan herbal untuk efisiensi pakan maksimal.</p>
                 <div class="flex flex-wrap gap-4">
                     <a href="#featured-products" class="bg-white text-emerald-900 px-10 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95 inline-block">
                         Lihat Promo
@@ -161,6 +187,12 @@
     </section>
 
     <div id="home-extra" class="app-screen active">
+    <section class="mobile-flash-sale px-4 pt-4">
+        <div class="rounded-2xl bg-emerald-900 p-4 text-white flex items-center justify-between"><div><p class="text-[10px] font-bold tracking-widest text-amber-300">FLASH SALE HARI INI</p><p class="text-[10px] text-emerald-200 mt-1">Berakhir dalam: <strong>03 : 42 : 18</strong></p></div><i class="fa-solid fa-bolt text-amber-300 text-2xl"></i></div>
+    </section>
+    <section class="mobile-quick-actions px-4 pt-4">
+        <div class="grid grid-cols-4 gap-2"><button type="button" data-screen="catalog" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-drumstick-bite text-orange-500"></i><span class="block text-[10px] font-bold mt-2">Ayam</span></button><button type="button" data-screen="catalog" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-cow text-emerald-600"></i><span class="block text-[10px] font-bold mt-2">Sapi</span></button><button type="button" data-screen="education" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-calculator text-blue-500"></i><span class="block text-[10px] font-bold mt-2">Kalkulator</span></button><button type="button" data-screen="catalog" class="rounded-xl bg-white border border-gray-100 p-3 text-center"><i class="fa-solid fa-pills text-purple-500"></i><span class="block text-[10px] font-bold mt-2">Suplemen</span></button></div>
+    </section>
     <!-- Category Grid -->
     <section id="categories" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <div class="flex items-center justify-between mb-5 md:mb-10">
@@ -224,6 +256,7 @@
             <!-- Card produk akan otomatis di-render oleh Script JS di bawah -->
         </div>
     </section>
+    <section class="mobile-review px-4 pb-8"><h2 class="text-lg font-extrabold mb-3">Apa Kata Peternak?</h2><div class="rounded-2xl bg-white border border-gray-100 p-4 flex gap-3"><div class="w-10 h-10 shrink-0 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700"><i class="fa-solid fa-user"></i></div><div><div class="text-amber-400 text-xs">★★★★★</div><h3 class="font-bold text-sm mt-1">Pak H. Santoso - Blitar</h3><p class="text-xs text-gray-500 mt-1">“Pengiriman armada Dehpri tepat waktu langsung ke kandang.”</p></div></div></section>
 
     </div>
 
