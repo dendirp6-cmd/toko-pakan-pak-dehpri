@@ -272,6 +272,12 @@
             const message = document.getElementById('orders-message');
             try {
                 const response = await fetch('/api/orders', { headers: adminHeaders });
+                if (response.status === 401) {
+                    sessionStorage.removeItem('pdh_admin_password');
+                    alert('Password admin tidak cocok. Silakan masukkan kembali password yang tersimpan di Vercel.');
+                    location.reload();
+                    return;
+                }
                 const result = await response.json();
                 if (!response.ok || !result.success) throw new Error(result.message || 'Data order belum bisa dibaca.');
                 orders = result.data || [];
