@@ -177,6 +177,7 @@
     <section id="cart-screen" class="app-screen mobile-shell max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <p class="text-xs font-bold uppercase tracking-widest text-emerald-600">Siap dipesan</p><h2 class="text-2xl font-extrabold text-gray-900 mt-1 mb-6">Keranjang</h2>
         <div id="cart-container" class="space-y-3"></div>
+        <form id="checkout-form" class="hidden soft-card rounded-3xl bg-white p-5 mt-5 space-y-3"><h3 class="font-extrabold text-gray-900">Data Pemesan</h3><input id="customer-name" required placeholder="Nama lengkap" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-emerald-500"><input id="customer-phone" required placeholder="Nomor WhatsApp" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-emerald-500"><textarea id="customer-address" required placeholder="Alamat pengiriman" rows="3" class="w-full rounded-xl border border-gray-200 p-3 text-sm outline-none focus:border-emerald-500"></textarea><button type="submit" class="w-full rounded-2xl bg-emerald-600 py-3 text-sm font-bold text-white"><i class="fa-solid fa-receipt mr-1"></i> Buat Pesanan</button><p id="checkout-message" class="text-xs text-gray-500"></p></form>
         <div id="cart-summary" class="hidden soft-card rounded-3xl bg-white p-5 mt-5"><div class="flex justify-between text-sm text-gray-500"><span>Total pesanan</span><strong id="cart-total" class="text-lg text-gray-900"></strong></div><a id="cart-wa" href="#" target="_blank" class="mt-4 w-full rounded-2xl bg-emerald-600 py-3 text-center text-sm font-bold text-white block"><i class="fa-brands fa-whatsapp mr-1"></i> Lanjut pesan via WhatsApp</a></div>
     </section>
 
@@ -455,6 +456,7 @@
             if (!keranjang.length) {
                 container.innerHTML = '<div class="rounded-3xl bg-white border border-gray-100 p-10 text-center"><i class="fa-solid fa-basket-shopping text-4xl text-gray-200"></i><p class="font-bold text-gray-600 mt-4">Keranjang masih kosong</p><button type="button" data-screen="catalog" class="mt-4 rounded-xl bg-emerald-600 px-5 py-2 text-xs font-bold text-white">Jelajahi Katalog</button></div>';
                 summary.classList.add('hidden');
+                document.getElementById('checkout-form').classList.add('hidden');
                 return;
             }
             container.innerHTML = keranjang.map(item => `<div class="flex items-center gap-3 rounded-2xl bg-white border border-gray-100 p-3"><img src="${item.gambar}" alt="${item.nama}" class="w-16 h-16 rounded-xl object-cover"><div class="min-w-0 flex-1"><h3 class="font-bold text-sm truncate">${item.nama}</h3><p class="text-emerald-600 text-xs font-bold mt-1">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</p><div class="flex items-center gap-2 mt-2"><button type="button" data-cart-minus="${item.id}" class="w-6 h-6 rounded-md bg-gray-100">−</button><span class="text-xs font-bold">${item.jumlah}</span><button type="button" data-cart-plus="${item.id}" class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700">+</button></div></div></div>`).join('');
@@ -462,6 +464,7 @@
             document.getElementById('cart-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
             document.getElementById('cart-wa').href = `https://wa.me/6288289261732?text=${encodeURIComponent('Halo Pak Dehpri, saya ingin memesan: ' + keranjang.map(item => `${item.nama} (${item.jumlah})`).join(', '))}`;
             summary.classList.remove('hidden');
+            document.getElementById('checkout-form').classList.remove('hidden');
         }
 
         document.addEventListener('click', event => {
@@ -481,6 +484,31 @@
             }
         });
         document.getElementById('catalog-search').addEventListener('input', renderCatalog);
+        document.getElementById('checkout-form').addEventListener('submit', async event => {
+            event.preventDefault();
+            const message = document.getElementById('checkout-message');
+            message.textContent = 'Menyimpan pesanan...';
+            const payload = {
+                customerName: document.getElementById('customer-name').value.trim(),
+                customerPhone: document.getElementById('customer-phone').value.trim(),
+                customerAddress: document.getElementById('customer-address').value.trim(),
+                items: keranjang.map(item => ({ productId: item.id, name: item.nama, price: item.harga, quantity: item.jumlah }))
+            };
+            try {
+                const response = await fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || 'Pesanan gagal disimpan.');
+                message.textContent = `Pesanan ${result.data.order_number} berhasil dibuat.`;
+                const text = `Halo Pak Dehpri, saya ingin memesan ${result.data.order_number}: ${keranjang.map(item => `${item.nama} (${item.jumlah})`).join(', ')}. Nama: ${payload.customerName}. Alamat: ${payload.customerAddress}`;
+                window.open(`https://wa.me/6288289261732?text=${encodeURIComponent(text)}`, '_blank');
+                keranjang = [];
+                localStorage.removeItem('keranjangPakDehpri');
+                updateCartBadge();
+                setTimeout(renderCart, 300);
+            } catch (error) {
+                message.textContent = error.message;
+            }
+        });
         document.querySelectorAll('.catalog-filter').forEach(button => button.addEventListener('click', () => {
             katalogFilter = button.dataset.filter;
             document.querySelectorAll('.catalog-filter').forEach(item => item.classList.remove('bg-emerald-600', 'text-white'));
@@ -523,6 +551,9 @@
         });
 
         renderProducts().then(() => { updateCartBadge(); renderCatalog(); });
+        const sessionId = sessionStorage.getItem('pdh_session') || crypto.randomUUID();
+        sessionStorage.setItem('pdh_session', sessionId);
+        fetch('/api/traffic', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventType: 'page_view', sessionId, pagePath: location.pathname }) }).then(() => {}).catch(() => {});
     </script>
 
 </body>

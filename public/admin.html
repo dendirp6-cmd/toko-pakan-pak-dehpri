@@ -142,6 +142,14 @@
 
         </div>
 
+        <!-- Laporan Order dan Keuangan -->
+        <section class="space-y-5">
+            <div class="flex items-center justify-between"><div><h2 class="text-xl font-extrabold text-gray-900">Laporan Penjualan</h2><p class="text-xs text-gray-500 mt-1">Data order tersimpan dari checkout pembeli.</p></div><button type="button" onclick="loadOrders()" class="rounded-xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-700"><i class="fa-solid fa-rotate mr-1"></i> Muat Ulang</button></div>
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-3"><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Total Order</p><strong id="stat-orders" class="text-2xl block mt-1">0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Omzet Selesai</p><strong id="stat-revenue" class="text-lg block mt-1 text-emerald-600">Rp 0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Profit Kotor</p><strong id="stat-profit" class="text-lg block mt-1 text-blue-600">Rp 0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Dibatalkan</p><strong id="stat-cancelled" class="text-2xl block mt-1 text-red-500">0</strong></div><div class="bg-white rounded-2xl border border-gray-100 p-4"><p class="text-[10px] text-gray-400 font-bold uppercase">Trafik Tercatat</p><strong id="stat-traffic" class="text-2xl block mt-1 text-amber-500">-</strong></div></div>
+            <div id="orders-message" class="hidden rounded-xl bg-amber-50 border border-amber-100 p-4 text-xs text-amber-800"></div>
+            <div class="overflow-x-auto rounded-2xl border border-gray-100 bg-white"><table class="w-full text-xs text-left"><thead class="bg-gray-50 text-gray-500 uppercase font-bold"><tr><th class="p-3">Order</th><th class="p-3">Pembeli</th><th class="p-3">Total</th><th class="p-3">Status</th><th class="p-3">Aksi</th></tr></thead><tbody id="orders-body" class="divide-y divide-gray-100"><tr><td colspan="5" class="p-6 text-center text-gray-400">Memuat data order...</td></tr></tbody></table></div>
+        </section>
+
     </main>
 
     <!-- Popup gambar produk -->
@@ -255,6 +263,44 @@
             document.body.classList.remove('overflow-hidden');
         }
 
+        const formatRupiah = value => `Rp ${(Number(value) || 0).toLocaleString('id-ID')}`;
+        let orders = [];
+        const adminPassword = sessionStorage.getItem('pdh_admin_password') || prompt('Masukkan password admin:');
+        if (adminPassword) sessionStorage.setItem('pdh_admin_password', adminPassword);
+        const adminHeaders = adminPassword ? { 'x-admin-password': adminPassword } : {};
+        async function loadOrders() {
+            const message = document.getElementById('orders-message');
+            try {
+                const response = await fetch('/api/orders', { headers: adminHeaders });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || 'Data order belum bisa dibaca.');
+                orders = result.data || [];
+                const trafficResponse = await fetch('/api/traffic/summary', { headers: adminHeaders });
+                const trafficResult = await trafficResponse.json();
+                if (trafficResponse.ok && trafficResult.success) document.getElementById('stat-traffic').textContent = trafficResult.data.total;
+                const completed = orders.filter(order => order.status === 'completed');
+                const cancelled = orders.filter(order => order.status === 'cancelled');
+                const revenue = completed.reduce((sum, order) => sum + Number(order.total || 0), 0);
+                const profit = completed.reduce((sum, order) => sum + (order.order_items || []).reduce((total, item) => total + ((Number(item.selling_price) - Number(item.cost_price)) * Number(item.quantity)), 0), 0);
+                document.getElementById('stat-orders').textContent = orders.length;
+                document.getElementById('stat-revenue').textContent = formatRupiah(revenue);
+                document.getElementById('stat-profit').textContent = formatRupiah(profit);
+                document.getElementById('stat-cancelled').textContent = cancelled.length;
+                document.getElementById('orders-message').classList.add('hidden');
+                document.getElementById('orders-body').innerHTML = orders.length ? orders.map(order => `<tr><td class="p-3 font-bold">${order.order_number}<div class="text-[10px] text-gray-400">${new Date(order.created_at).toLocaleString('id-ID')}</div></td><td class="p-3">${order.customer_name}<div class="text-[10px] text-gray-400">${order.customer_phone}</div></td><td class="p-3 font-bold text-emerald-600">${formatRupiah(order.total)}</td><td class="p-3"><span class="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-bold">${order.status}</span></td><td class="p-3"><select onchange="ubahStatus('${order.id}', this.value)" class="rounded-lg border border-gray-200 p-1 text-[10px]"><option value="">Ubah status</option><option value="confirmed">confirmed</option><option value="processing">processing</option><option value="shipped">shipped</option><option value="completed">completed</option><option value="cancelled">cancelled</option></select></td></tr>`).join('') : '<tr><td colspan="5" class="p-6 text-center text-gray-400">Belum ada order.</td></tr>';
+            } catch (error) {
+                message.textContent = `Laporan belum aktif: ${error.message} Pastikan SUPABASE_SERVICE_ROLE_KEY dan ADMIN_PASSWORD sudah diisi di environment server/Vercel.`;
+                message.classList.remove('hidden');
+                document.getElementById('orders-body').innerHTML = '<tr><td colspan="5" class="p-6 text-center text-gray-400">Belum dapat memuat order.</td></tr>';
+            }
+        }
+        async function ubahStatus(id, status) {
+            if (!status) return;
+            const response = await fetch(`/api/orders/${id}/status`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', ...adminHeaders }, body: JSON.stringify({ status }) });
+            if (!response.ok) alert('Status order belum dapat diubah. Pastikan service key sudah diatur.');
+            await loadOrders();
+        }
+
         // Delegated click bekerja lebih konsisten pada tap Android dan iPhone.
         document.addEventListener('click', event => {
             const link = event.target.closest('[data-lightbox-src]');
@@ -287,6 +333,7 @@
         });
 
         renderAdmin();
+        loadOrders();
     </script>
 </body>
 </html>
