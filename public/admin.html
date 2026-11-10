@@ -25,7 +25,6 @@
             main > div:first-child p { line-height: 1.5; }
             .admin-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
             .admin-stats > div { padding: 16px; min-height: 104px; }
-            .admin-stats > div:last-child { grid-column: 1 / -1; }
             .admin-stats h3 { font-size: 26px; }
             .admin-stats .w-12 { width: 38px; height: 38px; font-size: 16px; }
             .admin-product-layout { gap: 16px; }
@@ -74,17 +73,17 @@
 <body class="bg-gray-50 text-gray-900 pb-20">
 
     <!-- Navbar Admin -->
-    <nav class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+    <nav class="admin-topbar bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <button id="sidebarToggle" type="button" class="md:hidden w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
                 <div class="bg-emerald-600 p-2 rounded-xl text-white">
                     <i class="fa-solid fa-leaf text-lg"></i>
                 </div>
-                <span class="font-bold text-gray-900 text-lg">Pak Dehpri Admin</span>
+                <div><span class="font-bold text-gray-900 text-base block">Pak Dehpri Admin <i class="fa-solid fa-circle text-[8px] text-emerald-500 align-middle"></i></span><span class="text-[10px] text-gray-400">Toko Pakan Ternak & Unggas</span></div>
             </div>
             <a href="/" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-4 py-2 rounded-xl transition-all flex items-center gap-2">
-                <i class="fa-solid fa-arrow-left"></i> Kembali ke Toko
+                <i class="fa-solid fa-store"></i> Ke Toko
             </a>
         </div>
     </nav>
@@ -111,10 +110,7 @@
     <main class="admin-main max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
         <section id="dashboard" class="space-y-6">
         
-        <div>
-            <h1 class="text-2xl font-extrabold text-gray-900">Panel Admin Toko</h1>
-            <p class="text-xs text-gray-500 font-medium mt-1">Kelola ringkasan stok, pendaftaran pakan baru, dan data produk.</p>
-        </div>
+        <div class="admin-welcome"><div class="flex items-start justify-between gap-4"><div><p class="text-xs font-bold text-emerald-100"><i class="fa-regular fa-calendar mr-1"></i> Selasa, 10 Nov 2026</p><h1 class="mt-3 text-xl font-extrabold">Selamat datang, Pak Dehpri! <span aria-hidden="true">👋</span></h1><p class="mt-1 text-xs text-emerald-50">Kelola ringkasan stok, pendaftaran pakan baru, dan penjualan toko dengan cepat.</p></div><span class="shrink-0 rounded-full bg-emerald-950/30 px-2 py-1 text-[9px] font-bold text-emerald-100"><i class="fa-solid fa-bolt mr-1 text-amber-300"></i>Sistem Aktif</span></div><div class="mt-5 grid grid-cols-2 gap-2"><a href="#produk" data-admin-view="produk" class="rounded-xl bg-emerald-400 px-3 py-2.5 text-center text-[11px] font-extrabold text-emerald-950"><i class="fa-solid fa-plus mr-1"></i>Tambah Produk</a><a href="#pesanan" data-admin-view="pesanan" class="rounded-xl border border-emerald-300/40 bg-white/10 px-3 py-2.5 text-center text-[11px] font-extrabold text-white"><i class="fa-solid fa-receipt mr-1"></i>Cek Pesanan</a></div></div>
 
         <!-- Ringkasan Statistik -->
         <div class="admin-stats grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -147,9 +143,14 @@
                     <i class="fa-solid fa-wheat-awn"></i>
                 </div>
             </div>
+            <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+                <div><p class="text-xs font-semibold text-gray-400">Omzet Bulan Ini</p><h3 id="dashboard-revenue" class="text-xl font-extrabold text-gray-900 mt-2">Rp 0</h3><p class="text-[10px] text-emerald-600 mt-1">Dari pesanan selesai</p></div>
+                <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl"><i class="fa-solid fa-wallet"></i></div>
+            </div>
         </div>
-        <div class="admin-welcome"><p class="text-xs font-bold text-emerald-100">Ringkasan Toko</p><h2 class="mt-1 text-xl font-extrabold">Selamat datang, Pak Dehpri</h2><p class="mt-1 text-xs text-emerald-50">Pilih menu di bawah untuk mengelola toko dengan cepat.</p></div>
-        <div class="grid grid-cols-2 gap-3"><a href="#produk" data-admin-view="produk" class="admin-quick-action"><i class="fa-solid fa-plus-circle text-lg"></i><span>Tambah produk</span></a><a href="#pesanan" data-admin-view="pesanan" class="admin-quick-action"><i class="fa-solid fa-receipt text-lg"></i><span>Cek pesanan</span></a></div>
+        <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4"><div class="flex items-start gap-3"><div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500 text-white"><i class="fa-solid fa-bell"></i></div><div class="min-w-0"><div class="flex items-center justify-between gap-2"><h2 class="text-xs font-extrabold text-amber-900">Perhatian: Stok Pakan Rendah</h2><span id="low-stock-count" class="rounded-md bg-amber-200 px-2 py-1 text-[9px] font-extrabold text-amber-900">0 Item</span></div><p id="low-stock-items" class="mt-1 text-[10px] leading-4 text-amber-800">Stok produk masih aman.</p><a href="#produk" data-admin-view="produk" class="mt-2 inline-block text-[10px] font-extrabold text-emerald-700">Perbarui Stok Sekarang <i class="fa-solid fa-chevron-right ml-1"></i></a></div></div></div>
+        <div><h2 class="mb-3 text-sm font-extrabold text-gray-900"><i class="fa-solid fa-bolt mr-1 text-amber-500"></i>Akses Cepat Pengelolaan</h2><div class="grid grid-cols-2 gap-3"><a href="#produk" data-admin-view="produk" class="admin-quick-action"><i class="fa-solid fa-plus text-lg text-emerald-600"></i><span>Tambah Pakan<small class="mt-1 block text-[9px] font-medium text-gray-400">Input stok & harga</small></span></a><a href="#pesanan" data-admin-view="pesanan" class="admin-quick-action"><i class="fa-solid fa-clipboard-list text-lg text-blue-600"></i><span>Proses Pesanan<small class="mt-1 block text-[9px] font-medium text-gray-400"><span id="quick-order-count">0</span> pesanan baru</small></span></a></div></div>
+        <div class="rounded-3xl bg-white p-4 shadow-sm"><div class="mb-3 flex items-center justify-between"><h2 class="text-sm font-extrabold text-gray-900"><i class="fa-solid fa-clock-rotate-left mr-1 text-gray-500"></i>Pesanan Terakhir</h2><a href="#pesanan" data-admin-view="pesanan" class="text-[10px] font-extrabold text-emerald-600">Lihat Semua</a></div><div id="recent-orders" class="space-y-2"><p class="py-4 text-center text-xs text-gray-400">Memuat pesanan...</p></div></div>
         </section>
 
         <!-- Form & Table Grid -->
@@ -292,6 +293,9 @@
             document.getElementById('stat-total-produk').innerText = data.length;
             const totalStok = data.reduce((acc, curr) => acc + (Number(curr.stok) || 0), 0);
             document.getElementById('stat-total-stok').innerText = totalStok;
+            const lowStock = data.filter(item => Number(item.stok) <= 20);
+            document.getElementById('low-stock-count').textContent = `${lowStock.length} Item`;
+            document.getElementById('low-stock-items').textContent = lowStock.length ? `${lowStock.slice(0, 2).map(item => item.nama).join(' & ')} perlu diperiksa. Segera lakukan pengisian ulang.` : 'Stok semua produk masih aman.';
             const newProductCount = Number(localStorage.getItem('pdh_new_products') || 0);
             document.getElementById('badge-produk').textContent = newProductCount;
             document.getElementById('badge-produk').classList.toggle('hidden', newProductCount === 0);
@@ -411,9 +415,12 @@
                 document.getElementById('stat-orders').textContent = orders.length;
                 document.getElementById('stat-revenue').textContent = formatRupiah(revenue);
                 document.getElementById('stat-profit').textContent = formatRupiah(profit);
+                document.getElementById('dashboard-revenue').textContent = formatRupiah(revenue);
                 document.getElementById('stat-cancelled').textContent = cancelled.length;
+                document.getElementById('quick-order-count').textContent = orders.filter(order => order.status === 'pending').length;
                 updateActivityBadges();
                 document.getElementById('orders-message').classList.add('hidden');
+                document.getElementById('recent-orders').innerHTML = orders.length ? orders.slice(0, 3).map(order => `<div class="flex items-center gap-3 rounded-2xl border border-gray-100 p-3"><div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${order.status === 'completed' ? 'bg-emerald-100 text-emerald-600' : order.status === 'cancelled' ? 'bg-red-100 text-red-500' : 'bg-amber-100 text-amber-600'}"><i class="fa-solid ${order.status === 'completed' ? 'fa-check' : order.status === 'cancelled' ? 'fa-xmark' : 'fa-hourglass-half'}"></i></div><div class="min-w-0 flex-1"><p class="truncate text-[11px] font-extrabold text-gray-800">${order.customer_name}</p><p class="truncate text-[9px] text-gray-400">${(order.order_items || []).length} item pesanan</p></div><div class="text-right"><p class="text-[11px] font-extrabold text-gray-900">${formatRupiah(order.total)}</p><span class="rounded-full bg-gray-100 px-2 py-1 text-[9px] font-bold text-gray-600">${order.status}</span></div></div>`).join('') : '<p class="py-4 text-center text-xs text-gray-400">Belum ada pesanan.</p>';
                 document.getElementById('orders-body').innerHTML = orders.length ? orders.map(order => `<tr><td class="p-3 font-bold">${order.order_number}<div class="text-[10px] text-gray-400">${new Date(order.created_at).toLocaleString('id-ID')}</div><details class="mt-2 font-normal"><summary class="cursor-pointer text-emerald-700 text-[10px] font-bold">Lihat detail pesanan</summary><div class="mt-2 rounded-xl bg-gray-50 p-2 space-y-1">${(order.order_items || []).map(item => `<div class="flex justify-between gap-3"><span>${item.product_name} × ${item.quantity}</span><b>${formatRupiah(item.line_total)}</b></div>`).join('') || '<span>Detail produk tidak tersedia</span>'}</div></details></td><td class="p-3">${order.customer_name}<div class="text-[10px] text-gray-400">${order.customer_phone}</div><div class="text-[10px] text-gray-400">${order.customer_address || '-'}</div></td><td class="p-3 font-bold text-emerald-600">${formatRupiah(order.total)}</td><td class="p-3"><span class="rounded-full bg-gray-100 px-2 py-1 text-[10px] font-bold">${order.status}</span></td><td class="p-3"><select onchange="ubahStatus('${order.id}', this.value)" class="rounded-lg border border-gray-200 p-1 text-[10px]"><option value="">Ubah status</option><option value="confirmed">confirmed</option><option value="processing">processing</option><option value="shipped">shipped</option><option value="completed">completed</option><option value="cancelled">cancelled</option></select></td></tr>`).join('') : '<tr><td colspan="5" class="p-6 text-center text-gray-400">Belum ada order.</td></tr>';
             } catch (error) {
                 message.textContent = `Laporan belum aktif: ${error.message} Pastikan SUPABASE_SERVICE_ROLE_KEY dan ADMIN_PASSWORD sudah diisi di environment server/Vercel.`;
