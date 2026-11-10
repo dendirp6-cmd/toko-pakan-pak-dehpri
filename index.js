@@ -23,6 +23,7 @@ const supabaseUrl = process.env.SUPABASE_URL || 'https://bvlunodvvhvsraewgcoi.su
 const supabasePublishableKey = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminPassword = process.env.ADMIN_PASSWORD;
+const { randomUUID } = require('crypto');
 
 function requireAdmin(req, res) {
   if (!adminPassword) {
@@ -73,11 +74,24 @@ app.post('/api/orders', async (req, res) => {
     const subtotal = normalizedItems.reduce((sum, item) => sum + item.line_total, 0);
     const total = Math.max(0, subtotal + (Number(shippingCost) || 0) - (Number(discount) || 0));
     const orderNumber = `PDH-${new Date().toISOString().slice(0, 10).replaceAll('-', '')}-${Date.now().toString().slice(-5)}`;
-    const [order] = await supabaseRequest('orders', {
+    const order = {
+      id: randomUUID(),
+      order_number: orderNumber,
+      customer_name: customerName,
+      customer_phone: customerPhone,
+      customer_address: customerAddress,
+      subtotal,
+      shipping_cost: Number(shippingCost) || 0,
+      discount: Number(discount) || 0,
+      total,
+      status: 'pending'
+    };
+    await supabaseRequest('orders', {
       method: 'POST',
-      body: { order_number: orderNumber, customer_name: customerName, customer_phone: customerPhone, customer_address: customerAddress, subtotal, shipping_cost: Number(shippingCost) || 0, discount: Number(discount) || 0, total, status: 'pending' }
+      prefer: 'return=minimal',
+      body: order
     });
-    await supabaseRequest('order_items', { method: 'POST', body: normalizedItems.map(item => ({ ...item, order_id: order.id })) });
+    await supabaseRequest('order_items', { method: 'POST', prefer: 'return=minimal', body: normalizedItems.map(item => ({ ...item, order_id: order.id })) });
     res.status(201).json({ success: true, data: { ...order, items: normalizedItems } });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
