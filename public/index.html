@@ -103,7 +103,7 @@
     <main id="home-screen" class="app-screen active mobile-shell">
     <header class="mobile-app-header">
         <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-emerald-400/20 flex items-center justify-center"><i class="fa-solid fa-leaf text-emerald-200"></i></div><div><div class="font-extrabold leading-none">Pak Dehpri <span class="text-[9px] text-emerald-300">OFFICIAL</span></div><div class="text-[10px] text-emerald-200 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>Bekasi, Jawa Barat</div></div></div>
-        <div class="flex items-center gap-4"><i class="fa-regular fa-bell text-emerald-100"></i><button type="button" data-screen="cart" class="relative"><i class="fa-solid fa-bag-shopping text-emerald-100"></i><span class="absolute -right-2 -top-2 rounded-full bg-amber-400 text-[9px] px-1.5 text-emerald-950">0</span></button></div>
+        <div class="flex items-center gap-4"><i class="fa-regular fa-bell text-emerald-100"></i><button type="button" data-screen="cart" class="relative"><i class="fa-solid fa-bag-shopping text-emerald-100"></i><span id="header-cart-badge" class="absolute -right-2 -top-2 rounded-full bg-amber-400 text-[9px] px-1.5 text-emerald-950">0</span></button></div>
     </header>
     <div class="mobile-story-row">
         <button type="button" class="mobile-story"><span><i class="fa-solid fa-percent"></i></span>Diskon Sak</button>
@@ -123,12 +123,12 @@
                 <h1 class="text-3xl sm:text-6xl font-extrabold text-white mb-6 leading-[1.1] tracking-tight">Penggemuk Ternak Tercepat & Alami</h1>
                 <p class="text-emerald-50/80 text-sm sm:text-lg mb-10 max-w-xl">Formula asam amino dan herbal untuk efisiensi pakan maksimal.</p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="#featured-products" class="bg-white text-emerald-900 px-10 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95 inline-block">
+                    <button type="button" data-screen="catalog" class="bg-white text-emerald-900 px-10 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl transition-all hover:-translate-y-1 active:scale-95 inline-block">
                         Lihat Promo
-                    </a>
-                    <a href="#categories" class="bg-emerald-800/40 backdrop-blur-md text-white border border-white/10 px-10 py-4 rounded-2xl font-bold hover:bg-emerald-800/60 transition-all inline-block">
+                    </button>
+                    <button type="button" data-screen="catalog" class="bg-emerald-800/40 backdrop-blur-md text-white border border-white/10 px-10 py-4 rounded-2xl font-bold hover:bg-emerald-800/60 transition-all inline-block">
                         Cek Katalog
-                    </a>
+                    </button>
                 </div>
             </div>
             <div class="absolute right-[-5%] bottom-[-5%] opacity-10 hidden lg:block rotate-12">
@@ -158,7 +158,7 @@
             <button class="catalog-filter shrink-0 rounded-full bg-white px-4 py-2 text-xs font-bold text-gray-500 border border-gray-200" data-filter="vitamin">Vitamin</button>
             <button class="catalog-filter shrink-0 rounded-full bg-white px-4 py-2 text-xs font-bold text-gray-500 border border-gray-200" data-filter="obat">Obat</button>
         </div>
-        <div id="catalog-container" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6"></div>
+        <div id="catalog-container" class="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-1 sm:gap-6"></div>
     </section>
 
     <!-- EduTernak Screen -->
@@ -295,7 +295,7 @@
                     <ul class="space-y-4 text-emerald-200/60 text-sm">
                         <li class="flex items-center gap-3">
                             <i class="fa-solid fa-phone text-emerald-400"></i>
-                            <span>+62 812 3456 7890</span>
+                            <span>+62 882 8926 1732</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <i class="fa-solid fa-envelope text-emerald-400"></i>
@@ -326,6 +326,7 @@
     <script>
         let semuaProduk = [];
         let keranjang = JSON.parse(localStorage.getItem('keranjangPakDehpri') || '[]');
+        let katalogFilter = 'all';
 
         async function getProducts() {
             const stored = localStorage.getItem('dataPakanStore');
@@ -411,12 +412,20 @@
         function renderCatalog() {
             const container = document.getElementById('catalog-container');
             const query = (document.getElementById('catalog-search').value || '').toLowerCase();
-            const filtered = semuaProduk.filter(item => item.nama.toLowerCase().includes(query));
+            const filtered = semuaProduk.filter(item => {
+                const text = `${item.nama} ${item.deskripsi || ''}`.toLowerCase();
+                const matchesSearch = text.includes(query);
+                const matchesFilter = katalogFilter === 'all' ||
+                    (katalogFilter === 'vitamin' && /(vit|vitamin|suplemen|doxy|tetra)/.test(text)) ||
+                    (katalogFilter === 'obat' && /(obat|racun|doxy|tetra)/.test(text)) ||
+                    (katalogFilter === 'pakan' && !/(obat|racun|vit|vitamin|suplemen|doxy|tetra)/.test(text));
+                return matchesSearch && matchesFilter;
+            });
             document.getElementById('catalog-count').textContent = `${filtered.length} produk`;
             container.innerHTML = filtered.length ? filtered.map(item => `
                 <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                    <div class="h-36 sm:h-52 bg-gray-50"><img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover"></div>
-                    <div class="p-3"><p class="text-[10px] text-gray-400 uppercase font-bold">Official Store</p><h3 class="font-bold text-sm text-gray-900 line-clamp-2 mt-1">${item.nama}</h3><p class="text-emerald-600 font-extrabold text-sm mt-2">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</p><button type="button" data-add-cart="${item.id}" class="mt-3 w-full rounded-xl bg-emerald-600 py-2 text-xs font-bold text-white">Tambah</button></div>
+                    <div class="h-20 sm:h-52 bg-gray-50"><img src="${item.gambar}" alt="${item.nama}" class="w-full h-full object-cover"></div>
+                    <div class="p-1.5 sm:p-3"><p class="hidden sm:block text-[10px] text-gray-400 uppercase font-bold">Official Store</p><h3 class="font-bold text-[8px] sm:text-sm text-gray-900 line-clamp-2 mt-1">${item.nama}</h3><p class="text-emerald-600 font-extrabold text-[8px] sm:text-sm mt-1 sm:mt-2">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</p><button type="button" data-add-cart="${item.id}" class="mt-1 sm:mt-3 w-full rounded-md sm:rounded-xl bg-emerald-600 py-1 sm:py-2 text-[8px] sm:text-xs font-bold text-white">Tambah</button></div>
                 </article>`).join('') : '<p class="col-span-full py-12 text-center text-sm text-gray-400">Produk tidak ditemukan.</p>';
         }
 
@@ -436,6 +445,8 @@
             badge.textContent = total;
             badge.classList.toggle('hidden', total === 0);
             badge.classList.toggle('flex', total > 0);
+            document.getElementById('header-cart-badge').textContent = total;
+            document.getElementById('header-cart-badge').classList.toggle('hidden', total === 0);
         }
 
         function renderCart() {
@@ -449,7 +460,7 @@
             container.innerHTML = keranjang.map(item => `<div class="flex items-center gap-3 rounded-2xl bg-white border border-gray-100 p-3"><img src="${item.gambar}" alt="${item.nama}" class="w-16 h-16 rounded-xl object-cover"><div class="min-w-0 flex-1"><h3 class="font-bold text-sm truncate">${item.nama}</h3><p class="text-emerald-600 text-xs font-bold mt-1">Rp ${(Number(item.harga) || 0).toLocaleString('id-ID')}</p><div class="flex items-center gap-2 mt-2"><button type="button" data-cart-minus="${item.id}" class="w-6 h-6 rounded-md bg-gray-100">−</button><span class="text-xs font-bold">${item.jumlah}</span><button type="button" data-cart-plus="${item.id}" class="w-6 h-6 rounded-md bg-emerald-100 text-emerald-700">+</button></div></div></div>`).join('');
             const total = keranjang.reduce((sum, item) => sum + (Number(item.harga) * item.jumlah), 0);
             document.getElementById('cart-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-            document.getElementById('cart-wa').href = `https://wa.me/6281234567890?text=${encodeURIComponent('Halo Pak Dehpri, saya ingin memesan: ' + keranjang.map(item => `${item.nama} (${item.jumlah})`).join(', '))}`;
+            document.getElementById('cart-wa').href = `https://wa.me/6288289261732?text=${encodeURIComponent('Halo Pak Dehpri, saya ingin memesan: ' + keranjang.map(item => `${item.nama} (${item.jumlah})`).join(', '))}`;
             summary.classList.remove('hidden');
         }
 
@@ -471,9 +482,11 @@
         });
         document.getElementById('catalog-search').addEventListener('input', renderCatalog);
         document.querySelectorAll('.catalog-filter').forEach(button => button.addEventListener('click', () => {
+            katalogFilter = button.dataset.filter;
             document.querySelectorAll('.catalog-filter').forEach(item => item.classList.remove('bg-emerald-600', 'text-white'));
             document.querySelectorAll('.catalog-filter').forEach(item => item.classList.add('bg-white', 'text-gray-500'));
             button.classList.add('bg-emerald-600', 'text-white'); button.classList.remove('bg-white', 'text-gray-500');
+            renderCatalog();
         }));
         ['edu-population', 'edu-weight'].forEach(id => document.getElementById(id).addEventListener('input', () => {
             const population = Number(document.getElementById('edu-population').value) || 0;
